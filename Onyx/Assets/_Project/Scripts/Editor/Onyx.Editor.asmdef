@@ -1,0 +1,22 @@
+{
+    "name": "Onyx.Editor",
+    "rootNamespace": "Onyx.Editor",
+    "references": [
+        "Onyx.Core",
+        "Onyx.Net",
+        "Onyx.Game",
+        "Unity.Netcode.Runtime",
+        "Unity.RenderPipelines.Universal.Runtime"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

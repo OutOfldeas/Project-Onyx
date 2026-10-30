@@ -3,7 +3,10 @@
     "rootNamespace": "Onyx.Game",
     "references": [
         "Onyx.Core",
-        "Onyx.Net"
+        "Onyx.Net",
+        "Unity.Netcode.Runtime",
+        "Unity.InputSystem",
+        "Unity.RenderPipelines.Universal.Runtime"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

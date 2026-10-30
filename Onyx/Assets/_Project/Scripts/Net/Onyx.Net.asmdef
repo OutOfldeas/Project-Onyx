@@ -2,7 +2,8 @@
     "name": "Onyx.Net",
     "rootNamespace": "Onyx.Net",
     "references": [
-        "Onyx.Core"
+        "Onyx.Core",
+        "Unity.Netcode.Runtime"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

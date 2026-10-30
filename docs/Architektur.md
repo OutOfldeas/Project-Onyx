@@ -9,6 +9,7 @@ Wie der Code von Project Onyx aufgebaut ist und welche Regeln dabei gelten.
 | **Onyx.Core** | `Onyx/Assets/_Project/Scripts/Core` | Reine Spiellogik: Überleben, Inventar, Skills, Weltdaten, Speicherformat | nur .NET – **kein** `UnityEngine` |
 | **Onyx.Net** | `Onyx/Assets/_Project/Scripts/Net` | Sitzungen, Verbindung, Host/Beitreten, später Steam und Cloud-Sperre | Core, Unity, Netzwerkpakete |
 | **Onyx.Game** | `Onyx/Assets/_Project/Scripts/Game` | Unity-Komponenten: Figuren, Kamera, Tilemaps, Licht, UI, Eingabe | Core, Net, Unity |
+| **Onyx.Editor** | `Onyx/Assets/_Project/Scripts/Editor` | Werkzeuge nur für den Editor (Menü *Onyx*), z. B. Szenen anlegen | alles, nur im Editor |
 
 Die Abhängigkeiten zeigen nur in eine Richtung: **Game → Net → Core**. Core weiß nichts von Unity oder vom Netzwerk.
 
@@ -27,8 +28,13 @@ _Project/
 ├── Scripts/
 │   ├── Core/        Onyx.Core  – reine Logik
 │   ├── Net/         Onyx.Net   – Netzwerk
-│   └── Game/        Onyx.Game  – Unity-Seite
-│       └── Bootstrap/   Startpunkt des Spiels
+│   ├── Game/        Onyx.Game  – Unity-Seite
+│   │   ├── Bootstrap/   Startpunkt des Spiels
+│   │   ├── Player/      Spielfigur: Bewegung, Darstellung
+│   │   ├── World/       Boden, Tilemaps
+│   │   ├── CameraRig/   Kamera
+│   │   └── DevTools/    Entwicklerhilfen (z. B. Host/Beitreten-Menü)
+│   └── Editor/      Onyx.Editor – Editor-Werkzeuge
 └── Tests/
     └── Core/        Onyx.Core.Tests – Tests der reinen Logik
 ```
@@ -40,6 +46,17 @@ Der Unterstrich in `_Project` sorgt dafür, dass unsere Inhalte oben stehen und 
 ## Start des Spiels
 
 `GameBootstrap` läuft automatisch, bevor die erste Szene geladen wird, egal welche Szene im Editor offen ist. Es legt das dauerhafte Objekt `[Onyx]` an, an das später Netzwerk, Speicherung und andere Dienste gehängt werden.
+
+## Netzwerk-Grundsätze
+
+- **Host = Server + Spieler.** Spielzustände (Sauerstoff, Inventar, Welt) entscheidet immer der Host.
+- **Ausnahme Bewegung:** Die eigene Figur bewegt der Besitzer selbst (`NetworkTransform` im Owner-Modus). So gibt es keine Eingabeverzögerung; für ein Koop-Spiel unter Freunden ist das vertretbar.
+- **Startplätze** vergibt der Host beim Beitreten (`SessionLauncher` → `SpawnLayout`).
+
+## Mehrspieler im Editor testen
+
+- **Multiplayer Play Mode** (Unity-Paket `com.unity.multiplayer.playmode`): *Window → Multiplayer → Multiplayer Play Mode*, einen zweiten virtuellen Spieler aktivieren. Ein Fenster hostet, das andere tritt `127.0.0.1` bei.
+- Alternativ: *File → Build And Run* für einen Mitspieler, der Editor ist der Host.
 
 ## Inhalte als Daten
 

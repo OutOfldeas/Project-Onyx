@@ -229,7 +229,8 @@ Siehe Art-Direction-Board (Design-Canvas „Art Direction – Koop-Weltraumspiel
 
 | Meilenstein | Inhalt | Frage, die er beantwortet |
 |---|---|---|
-| **M0** | Unity-Projekt, zwei Spieler verbinden sich über Steam und laufen über eine Tilemap | Steht das Netzwerk-Fundament? |
+| **M0a** | Zwei Spieler verbinden sich per IP und laufen gemeinsam über eine Tilemap (Platzhalter-Grafik, Pixel Perfect Camera) | Steht das Netzwerk-Fundament? |
+| **M0b** | Verbindung über Steam statt IP | Klappt es über das Internet ohne Portfreigabe? |
 | **M1** | Die Absturzstelle: Sauerstoff und Schilde, Kapsel als Nachfüllstation, kaputtes Modul an der Fregatte gemeinsam reparieren, Nacht und 2D-Licht | Fühlt sich der Koop-Kern gut an? |
 | **M2** | Welt in Abschnitten speichern, Cloud-Sperre, jeder kann hosten | Funktioniert die geteilte Welt? |
 | **M3** | Disziplin Technik mit Lernen durch Tun und ersten Skillknoten | Macht Lernen durch Tun Spaß? |
