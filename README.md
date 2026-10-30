@@ -7,14 +7,15 @@ Koop-Weltraumspiel für 2–4 Spieler: freie Erkundung, Survival, Basisbau und L
 | Pfad | Inhalt |
 |---|---|
 | `docs/` | Designdokumente (Spielkonzept, Systeme, Roadmap) |
-| `Onyx/` | Unity-Projekt (Unity 6 LTS, Vorlage „Universal 2D“) – wird noch angelegt |
+| `Onyx/` | Unity-Projekt (Vorlage „Universal 2D“) |
 
-## Unity-Projekt anlegen
+## Projekt öffnen
 
-1. Repo klonen.
-2. Im Unity Hub: **New project → Unity 6 (LTS) → Universal 2D**, Projektname `Onyx`, Speicherort = Wurzelordner dieses Repos.
-3. In Unity unter *Edit → Project Settings → Editor* prüfen: **Version Control Mode = Visible Meta Files**, **Asset Serialization = Force Text** (beides Standard in Unity 6).
-4. Committen und pushen. Die `.gitignore` im Wurzelordner hält `Library/`, `Temp/` usw. bereits aus dem Repo heraus.
+1. Repo klonen, z. B. mit [GitHub Desktop](https://desktop.github.com/).
+2. Im Unity Hub: **Add → Add project from disk** und den Ordner `Onyx` im Repo wählen.
+3. Editor-Version: **6000.6.7f1**. Alle im Team sollten dieselbe Version nutzen; die verwendete Version steht in `Onyx/ProjectSettings/ProjectVersion.txt`.
+
+`Library/`, `Temp/`, `Logs/` und `UserSettings/` erzeugt Unity lokal; sie werden über die `.gitignore` aus dem Repo herausgehalten.
 
 ## Dokumentation
 
