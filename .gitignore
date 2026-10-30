@@ -1,0 +1,56 @@
+# --- Unity (Projekt liegt in Onyx/) ---
+Onyx/[Ll]ibrary/
+Onyx/[Tt]emp/
+Onyx/[Oo]bj/
+Onyx/[Bb]uild/
+Onyx/[Bb]uilds/
+Onyx/[Ll]ogs/
+Onyx/[Uu]ser[Ss]ettings/
+Onyx/[Mm]emoryCaptures/
+Onyx/[Rr]ecordings/
+Onyx/Assets/Plugins/Editor/JetBrains*
+
+# Von Unity bzw. IDEs generiert
+Onyx/.vs/
+Onyx/.vscode/
+Onyx/.idea/
+Onyx/.gradle/
+Onyx/ExportedObj/
+Onyx/.consulo/
+Onyx/*.csproj
+Onyx/*.unityproj
+Onyx/*.sln
+Onyx/*.slnx
+Onyx/*.suo
+Onyx/*.tmp
+Onyx/*.user
+Onyx/*.userprefs
+Onyx/*.pidb
+Onyx/*.booproj
+Onyx/*.svd
+Onyx/*.pdb
+Onyx/*.mdb
+Onyx/*.opendb
+Onyx/*.VC.db
+Onyx/*.pidb.meta
+Onyx/*.pdb.meta
+Onyx/*.mdb.meta
+
+# Crash- und Absturzberichte
+Onyx/sysinfo.txt
+Onyx/mono_crash.*
+
+# Builds
+*.apk
+*.aab
+*.unitypackage
+*.app
+
+# Steam / lokale Konfiguration
+steam_appid.txt
+Onyx/Assets/StreamingAssets/aa.meta
+
+# Betriebssystem
+.DS_Store
+Thumbs.db
+Desktop.ini
