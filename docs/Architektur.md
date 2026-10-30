@@ -58,6 +58,12 @@ Der Unterstrich in `_Project` sorgt dafür, dass unsere Inhalte oben stehen und 
 - **Multiplayer Play Mode** (Unity-Paket `com.unity.multiplayer.playmode`): *Window → Multiplayer → Multiplayer Play Mode*, einen zweiten virtuellen Spieler aktivieren. Ein Fenster hostet, das andere tritt `127.0.0.1` bei.
 - Alternativ: *File → Build And Run* für einen Mitspieler, der Editor ist der Host.
 
+## Spielstand und Dev-Modus
+
+- **`WorldState`** (Core) bündelt den Spielstand einer Welt: Galaxie, Schiffsbauplan und -werte, Navigation, Tageszeit, Skills.
+- **`GameSession`** (Game) hält den `WorldState`, lässt ihn pro Frame laufen und hängt am dauerhaften Objekt `[Onyx]`.
+- **Dev-Modus** (`DevMode`, Taste F1): nur im Editor und in Entwickler-Builds. Die Befehle der Kernlogik liegen in `CoreDevCommands` (Core, getestet), Unity-spezifische Befehle (z. B. `tp`, `speed`) in `DevMode`. **Neue Systeme bekommen immer auch Dev-Befehle bzw. einen Bereich im Dev-Fenster.**
+
 ## Inhalte als Daten
 
 Gegenstände, Module, Fähigkeiten und Biome werden als **ScriptableObjects** angelegt. Werte lassen sich so im Editor ändern, ohne Code anzufassen.

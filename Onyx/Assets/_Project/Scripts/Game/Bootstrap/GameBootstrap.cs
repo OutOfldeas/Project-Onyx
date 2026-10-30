@@ -1,3 +1,6 @@
+using Onyx.Game.DevTools;
+using Onyx.Game.Session;
+using Onyx.Game.World;
 using UnityEngine;
 
 namespace Onyx.Game.Bootstrap
@@ -31,6 +34,14 @@ namespace Onyx.Game.Bootstrap
 
             Root = new GameObject(RootName);
             Object.DontDestroyOnLoad(Root);
+            Root.AddComponent<GameSession>();
+            Root.AddComponent<WorldLighting>();
+
+            // Dev-Modus nur im Editor und in Entwickler-Builds.
+            if (Debug.isDebugBuild)
+            {
+                Root.AddComponent<DevMode>();
+            }
 
             Debug.Log($"{RootName} Bootstrap: {Application.productName} {Application.version}, Unity {Application.unityVersion}");
         }

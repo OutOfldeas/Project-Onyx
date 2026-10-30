@@ -1,6 +1,6 @@
 # Project Onyx – Game Design Document
 
-> **Stand:** 30.10.2026 · Entwurf 02
+> **Stand:** 30.10.2026 · Entwurf 03
 > **Legende:** ✅ entschieden · 💡 Vorschlag (noch zu bestätigen) · ❓ offen
 
 ---
@@ -235,13 +235,38 @@ Siehe Art-Direction-Board (Design-Canvas „Art Direction – Koop-Weltraumspiel
 | **M2** | Welt in Abschnitten speichern, Cloud-Sperre, jeder kann hosten | Funktioniert die geteilte Welt? |
 | **M3** | Disziplin Technik mit Lernen durch Tun und ersten Skillknoten | Macht Lernen durch Tun Spaß? |
 | **Playtest 1** | Gemeinsam spielen, auswerten | Weiter so oder umsteuern? |
-| danach | Basisbau, Logistik, Schiff, Sternenkarte, Fraktionen, Raids | – |
+| parallel | Kernlogik und Dev-Modus für Galaxie, Reisen, Skilltree, Schiffswerft (siehe 10 und 11) | Sind die Systeme stimmig, bevor es echte Oberflächen gibt? |
+| danach | Echte UI für Sternenkarte, Werft und Skilltree; Basisbau, Logistik, Fraktionen, Raids | – |
 
-## 10. Offene Fragen ❓
+## 10. Systeme: Galaxie, Reisen, Werft
+
+### 10.1 Galaxie 💡
+- **Pro Welt aus einem Seed erzeugt** (Wiederspielwert; alle Spieler sehen dieselbe Karte, gespeichert wird nur der Fortschritt).
+- ca. 24 Sternsysteme mit 1–5 Planeten (Rostwüste, Savanne, Dschungel, Eis, Gift, Vulkan, Ödland, Gasriese), Gefahrenstufe 0–3.
+- **Sprungverbindungen**: Jedes System ist erreichbar (Spannbaum), dazu kurze Zusatzwege für Rundrouten.
+- **Fraktionsgebiete** (Konzern, Synth-Kollektiv, Schrottgilde) in den Randbereichen; das Startsystem ist frei und hat eine sichere Rostwelt (Absturzstelle).
+- Systeme sind unbekannt, bis man sie besucht (später auch per Scanner).
+
+### 10.2 Reisen 💡
+- Sprünge nur entlang von Verbindungen. Kosten: **Treibstoff pro Lichtjahr**.
+- **Sprungreichweite** hängt vom Schiff ab (Schub im Verhältnis zur Masse). Lange Verbindungen erfordern ein ausgebautes Schiff – so erschließt der Werftausbau neue Gebiete.
+- Innerhalb eines Systems: Umlaufbahn um Planeten ohne Treibstoff; Landen folgt mit den Planetenkarten.
+
+### 10.3 Schiffswerft ✅ (frei ausbaubar) / Details 💡
+- Das Schiff ist ein **Bauplan auf dem 16-px-Kachelraster**: Rumpfkacheln (begehbarer Boden) und Module mit fester Größe, drehbar um 90°.
+- Module (erste Liste): Cockpit, Reaktor, Solarpaneel, Triebwerk, Treibstofftank, Sauerstoffgenerator, Hydroponik, Frachtraum, Koje, Krankenstation, Werkbank, Recycler, Schildgenerator, Luftschleuse, Langstreckenscanner.
+- Aus dem Bauplan ergeben sich **Schiffswerte** (Energiebilanz, Sauerstoff, Fracht, Tank, Schub, Masse, Reichweite, Kojen, Schild, Kosten) und eine **Mängelliste** (z. B. Energiemangel, kein Cockpit).
+- Startschiff ist die **abgestürzte Fregatte** aus Akt 1.
+- Später: Baukosten in Schrott, Bauen nur in der Werft bzw. mit Werkbank, das Schiff als begehbare Karte in der Welt.
+
+## 11. Dev-Modus ✅
+
+Taste **F1** im Editor und in Entwickler-Builds: Konsole mit Befehlen (`help`), Sternenkarte zum Springen und Route planen, Skills (EP geben, Stufen setzen, freischalten, Umlernen), Schiffswerft (Rumpf malen, Module setzen) und Welt (Tageszeit, Zeitraffer, neue Welt). Jedes neue System bekommt hier seine Testfunktionen.
+
+## 12. Offene Fragen ❓
 
 - Gegner der Eröffnungsschlacht und Kampagnenziel nach dem Abheben (Abschnitt 3.3)
 - Kampf und Medizin: eigene Disziplinen oder Teil der vier?
 - Konkrete Zahlen für Stufen, Obergrenze und Umlernen
-- Prozedurale Galaxie pro Welt oder feste Karte?
 - Wie stark wird die Galaxie-Ebene (Strategie) ausgebaut?
 - Name des Spiels

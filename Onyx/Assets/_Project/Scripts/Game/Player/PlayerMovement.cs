@@ -1,3 +1,4 @@
+using Onyx.Game.DevTools;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -15,9 +16,16 @@ namespace Onyx.Game.Player
         [Tooltip("Laufgeschwindigkeit in Kacheln pro Sekunde.")]
         [SerializeField] private float speed = 5f;
 
+        /// <summary>Laufgeschwindigkeit in Kacheln pro Sekunde (im Dev-Modus änderbar).</summary>
+        public float Speed
+        {
+            get => speed;
+            set => speed = Mathf.Max(0f, value);
+        }
+
         private void Update()
         {
-            if (!IsSpawned || !IsOwner)
+            if (!IsSpawned || !IsOwner || DevMode.BlocksGameplayInput)
             {
                 return;
             }

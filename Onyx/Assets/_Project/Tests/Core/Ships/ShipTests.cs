@@ -74,6 +74,24 @@ namespace Onyx.Core.Tests.Ships
         }
 
         [Test]
+        public void Clear_And_CopyFrom()
+        {
+            var template = ShipTemplates.CrashedFrigate(Catalog);
+            var ship = new ShipBlueprint(ShipTemplates.GridWidth, ShipTemplates.GridHeight);
+            int changes = 0;
+            ship.Changed += () => changes++;
+
+            ship.CopyFrom(template);
+            Assert.That(ship.HullCount, Is.EqualTo(template.HullCount));
+            Assert.That(ship.Modules.Count, Is.EqualTo(template.Modules.Count));
+
+            ship.Clear();
+            Assert.That(ship.HullCount, Is.EqualTo(0));
+            Assert.That(ship.Modules, Is.Empty);
+            Assert.That(changes, Is.EqualTo(2));
+        }
+
+        [Test]
         public void HullConnectivity_IsDetected()
         {
             var ship = new ShipBlueprint(10, 10);

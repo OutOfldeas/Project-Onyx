@@ -176,6 +176,40 @@ namespace Onyx.Core.Ships
             return module;
         }
 
+        /// <summary>Entfernt alle Module und den gesamten Rumpf.</summary>
+        public void Clear()
+        {
+            modules.Clear();
+            Array.Clear(hull, 0, hull.Length);
+            Changed?.Invoke();
+        }
+
+        /// <summary>Übernimmt Rumpf und Module eines anderen Bauplans gleicher Größe (z. B. eine Vorlage).</summary>
+        public void CopyFrom(ShipBlueprint other)
+        {
+            if (other.Width != Width || other.Height != Height)
+            {
+                throw new ArgumentException("Baupläne müssen gleich groß sein.", nameof(other));
+            }
+
+            modules.Clear();
+            for (int x = 0; x < Width; x++)
+            {
+                for (int y = 0; y < Height; y++)
+                {
+                    hull[x, y] = other.hull[x, y];
+                }
+            }
+
+            foreach (var module in other.modules)
+            {
+                modules.Add(new PlacedModule(nextInstanceId++, module.Definition, module.X, module.Y, module.Rotated));
+            }
+
+            Name = other.Name;
+            Changed?.Invoke();
+        }
+
         /// <summary>Sind alle Rumpfkacheln zusammenhängend (4er-Nachbarschaft)?</summary>
         public bool IsHullConnected()
         {
