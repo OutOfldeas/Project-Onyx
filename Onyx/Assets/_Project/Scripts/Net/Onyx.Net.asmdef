@@ -3,7 +3,8 @@
     "rootNamespace": "Onyx.Net",
     "references": [
         "Onyx.Core",
-        "Unity.Netcode.Runtime"
+        "Unity.Netcode.Runtime",
+        "Unity.Networking.Transport"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

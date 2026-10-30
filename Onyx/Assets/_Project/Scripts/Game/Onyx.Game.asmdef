@@ -5,6 +5,7 @@
         "Onyx.Core",
         "Onyx.Net",
         "Unity.Netcode.Runtime",
+        "Unity.Networking.Transport",
         "Unity.InputSystem",
         "Unity.RenderPipelines.Universal.Runtime"
     ],

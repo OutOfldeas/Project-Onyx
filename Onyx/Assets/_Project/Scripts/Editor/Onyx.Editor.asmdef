@@ -6,6 +6,7 @@
         "Onyx.Net",
         "Onyx.Game",
         "Unity.Netcode.Runtime",
+        "Unity.Networking.Transport",
         "Unity.RenderPipelines.Universal.Runtime"
     ],
     "includePlatforms": [
