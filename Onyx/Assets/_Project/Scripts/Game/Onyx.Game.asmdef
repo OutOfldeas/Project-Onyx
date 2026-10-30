@@ -1,0 +1,17 @@
+{
+    "name": "Onyx.Game",
+    "rootNamespace": "Onyx.Game",
+    "references": [
+        "Onyx.Core",
+        "Onyx.Net"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

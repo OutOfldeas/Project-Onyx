@@ -1,0 +1,41 @@
+name: Core-Tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  core-tests:
+    name: Spiellogik (Onyx.Core) testen
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Tests ausführen
+        run: >
+          dotnet test tools/CoreTests/Onyx.Core.Tests.csproj
+          --logger "console;verbosity=normal"
+          --logger "trx;LogFileName=results.trx"
+          --results-directory test-results
+
+      - name: Zusammenfassung
+        if: always()
+        shell: python
+        run: |
+          import glob, sys, xml.etree.ElementTree as ET
+          files = glob.glob("test-results/*.trx")
+          if not files:
+              print("::error title=Core-Tests::Keine Testergebnisse gefunden")
+              sys.exit(1)
+          ns = {"t": "http://microsoft.com/schemas/VisualStudio/TeamTest/2010"}
+          c = ET.parse(files[0]).getroot().find("t:ResultSummary/t:Counters", ns).attrib
+          total, passed, failed = int(c["total"]), int(c["passed"]), int(c["failed"])
+          print(f"::notice title=Core-Tests::{passed} von {total} Tests bestanden, {failed} fehlgeschlagen")
+          if total == 0:
+              print("::error title=Core-Tests::Es wurden keine Tests ausgeführt")
+              sys.exit(1)

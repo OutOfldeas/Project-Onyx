@@ -54,3 +54,8 @@ Onyx/Assets/StreamingAssets/aa.meta
 .DS_Store
 Thumbs.db
 Desktop.ini
+
+# Testprojekt außerhalb von Unity
+tools/**/bin/
+tools/**/obj/
+test-results/
