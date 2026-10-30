@@ -58,3 +58,4 @@ Desktop.ini
 # Testprojekt außerhalb von Unity
 tools/**/bin/
 tools/**/obj/
+test-results/
