@@ -59,3 +59,8 @@ Desktop.ini
 tools/**/bin/
 tools/**/obj/
 test-results/
+
+# Versehentlich angelegte Leerprojekte (nicht Teil des Spiels)
+NEO ONYX/
+Onyxx/
+Onyx/My project*/
