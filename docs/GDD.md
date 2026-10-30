@@ -1,6 +1,6 @@
 # Project Onyx – Game Design Document
 
-> **Stand:** 30.10.2026 · Entwurf 01
+> **Stand:** 30.10.2026 · Entwurf 02
 > **Legende:** ✅ entschieden · 💡 Vorschlag (noch zu bestätigen) · ❓ offen
 
 ---
@@ -30,9 +30,24 @@ Eine kleine Crew erkundet gemeinsam eine Galaxie, in der die Natur wunderschön 
 4. **Lernen durch Tun** – Fähigkeiten steigen, indem man die Tätigkeit ausübt. ✅
 5. **Die Welt läuft weiter** – Jeder kann jederzeit in die gemeinsame Welt, auch ohne Host. ✅
 
-## 3. Ausgangslage 💡
+## 3. Ausgangslage
 
-*Vorschlag, noch nicht bestätigt:* Die Spieler sind eine Crew von Abtrünnigen auf einem gestohlenen, geflickten Konzernschiff. Ziel ist es, eine freie Kolonie zu gründen, bevor der Konzern sie einholt. Das gibt dem Spiel eine Motivation, einen Antagonisten und ein Kampagnenende.
+### 3.1 Der Einstieg ✅
+
+Die Crew einer Fregatte verliert eine Weltraumschlacht. Die Spieler entkommen in **Fluchtkapseln** und **notlanden auf einem Planeten**. Auch die **Fregatte ist auf dem Planeten abgestürzt**.
+
+### 3.2 Akt 1: Die Absturzstelle 💡
+
+- **Getrennte Landung:** Jeder Spieler landet in einer eigenen Kapsel, verstreut in der Umgebung. Erstes Ziel: sich gegenseitig finden, indem man Landmarken beschreibt („roter Felsbogen, Rauch im Osten“). Das bringt Kommunikation bei, ohne wie ein Tutorial zu wirken.
+- **Die Kapsel als erster Rückzugsort:** Sauerstoff nachfüllen, Notsender, kleines Lager – der erste Versorgungspunkt (siehe 4.2).
+- **Die Fregatte wird das Schiff der Crew:** Wrack finden, bergen, reparieren und abheben. Das Abheben ist der Übergang zur Schiffs- und Galaxie-Ebene und erklärt, warum alles geflickt ist.
+- **Frühe Bedrohung:** Die Sieger der Schlacht durchsuchen die Absturzstelle. Das bringt die erste Fraktion ins Spiel.
+- **Frühere Posten an Bord** geben kleine Startboni in einer Disziplin (z. B. ehemaliger Bordtechniker → etwas Technik).
+
+### 3.3 Offen ❓
+
+- Wer hat die Schlacht gewonnen, und für wen hat die Fregatte gekämpft?
+- Was ist das langfristige Ziel nach dem Abheben (z. B. freie Kolonie gründen)?
 
 ## 4. Spielstruktur
 
@@ -215,7 +230,7 @@ Siehe Art-Direction-Board (Design-Canvas „Art Direction – Koop-Weltraumspiel
 | Meilenstein | Inhalt | Frage, die er beantwortet |
 |---|---|---|
 | **M0** | Unity-Projekt, zwei Spieler verbinden sich über Steam und laufen über eine Tilemap | Steht das Netzwerk-Fundament? |
-| **M1** | Sauerstoff und Schilde, kaputtes Modul gemeinsam reparieren, 2D-Licht | Fühlt sich der Koop-Kern gut an? |
+| **M1** | Die Absturzstelle: Sauerstoff und Schilde, Kapsel als Nachfüllstation, kaputtes Modul an der Fregatte gemeinsam reparieren, Nacht und 2D-Licht | Fühlt sich der Koop-Kern gut an? |
 | **M2** | Welt in Abschnitten speichern, Cloud-Sperre, jeder kann hosten | Funktioniert die geteilte Welt? |
 | **M3** | Disziplin Technik mit Lernen durch Tun und ersten Skillknoten | Macht Lernen durch Tun Spaß? |
 | **Playtest 1** | Gemeinsam spielen, auswerten | Weiter so oder umsteuern? |
@@ -223,7 +238,7 @@ Siehe Art-Direction-Board (Design-Canvas „Art Direction – Koop-Weltraumspiel
 
 ## 10. Offene Fragen ❓
 
-- Ausgangslage und Kampagnenziel (Vorschlag in Abschnitt 3)
+- Gegner der Eröffnungsschlacht und Kampagnenziel nach dem Abheben (Abschnitt 3.3)
 - Kampf und Medizin: eigene Disziplinen oder Teil der vier?
 - Konkrete Zahlen für Stufen, Obergrenze und Umlernen
 - Prozedurale Galaxie pro Welt oder feste Karte?
