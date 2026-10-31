@@ -1,15 +1,15 @@
 using System.Collections.Generic;
 using Onyx.Core;
+using Onyx.Core.Art;
 using Onyx.Core.CrashSite;
 using Onyx.Game.Session;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
-using UnityEngine.Tilemaps;
 
 namespace Onyx.Game.CrashSite
 {
     /// <summary>
-    /// Baut die Absturzstelle aus dem Spielstand sichtbar auf: Tilemap, Konsolen der
+    /// Baut die Absturzstelle aus dem Spielstand sichtbar auf: Bodenbild, Konsolen der
     /// Reparaturstellen und Lichter (Kapsel, Warnlampen, Notbeleuchtung des Wracks).
     /// Rein lokal – jeder Rechner erzeugt dasselbe Bild aus demselben Seed.
     /// </summary>
@@ -73,7 +73,7 @@ namespace Onyx.Game.CrashSite
             root = new GameObject("Absturzstelle (erzeugt)").transform;
             root.SetParent(transform, false);
 
-            BuildTilemap(layout);
+            BuildGround(layout);
             BuildPod(layout);
             foreach (var point in layout.RepairPoints)
             {
@@ -83,44 +83,49 @@ namespace Onyx.Game.CrashSite
             BuildWreckLights(layout);
         }
 
-        private void BuildTilemap(CrashSiteLayout layout)
+        private Texture2D groundTexture;
+
+        /// <summary>Boden, Felsen und Wände als ein Pixelbild (siehe <see cref="CrashSiteArt"/>).</summary>
+        private void BuildGround(CrashSiteLayout layout)
         {
-            var gridGo = new GameObject("Grid");
-            gridGo.transform.SetParent(root, false);
-            gridGo.AddComponent<Grid>();
-
-            var mapGo = new GameObject("Boden");
-            mapGo.transform.SetParent(gridGo.transform, false);
-            var tilemap = mapGo.AddComponent<Tilemap>();
-            var renderer = mapGo.AddComponent<TilemapRenderer>();
-            renderer.sortingOrder = -100;
-
-            var tileCache = new Dictionary<(SiteTile, int), Tile>();
-            int count = layout.Width * layout.Height;
-            var positions = new Vector3Int[count];
-            var tiles = new TileBase[count];
-            int i = 0;
-            for (int y = 0; y < layout.Height; y++)
+            PixelImage image = CrashSiteArt.Render(layout);
+            if (groundTexture != null)
             {
-                for (int x = 0; x < layout.Width; x++)
-                {
-                    SiteTile kind = layout.Get(x, y);
-                    int variant = (int)(Noise.Hash01(x, y, layout.Seed + 77) * SiteTileArt.Variants);
-                    if (!tileCache.TryGetValue((kind, variant), out var tile))
-                    {
-                        tile = ScriptableObject.CreateInstance<Tile>();
-                        tile.sprite = SiteTileArt.Tile(kind, variant);
-                        tile.hideFlags = HideFlags.DontSave;
-                        tileCache[(kind, variant)] = tile;
-                    }
-
-                    positions[i] = new Vector3Int(x - layout.OriginX, y - layout.OriginY, 0);
-                    tiles[i] = tile;
-                    i++;
-                }
+                Destroy(groundTexture);
             }
 
-            tilemap.SetTiles(positions, tiles);
+            groundTexture = new Texture2D(image.Width, image.Height, TextureFormat.RGBA32, false)
+            {
+                name = "Absturzstelle",
+                filterMode = FilterMode.Point,
+                wrapMode = TextureWrapMode.Clamp,
+                hideFlags = HideFlags.DontSave,
+            };
+
+            var colors = new Color32[image.Pixels.Length];
+            for (int i = 0; i < colors.Length; i++)
+            {
+                uint c = image.Pixels[i];
+                colors[i] = new Color32((byte)(c >> 16), (byte)(c >> 8), (byte)c, (byte)(c >> 24));
+            }
+
+            groundTexture.SetPixels32(colors);
+            groundTexture.Apply(false, true);
+
+            var go = new GameObject("Boden");
+            go.transform.SetParent(root, false);
+            go.transform.position = new Vector3(-layout.OriginX, -layout.OriginY, 0f);
+            var renderer = go.AddComponent<SpriteRenderer>();
+            renderer.sprite = Sprite.Create(groundTexture, new Rect(0, 0, image.Width, image.Height), Vector2.zero, GameConstants.PixelsPerUnit);
+            renderer.sortingOrder = -100;
+        }
+
+        private void OnDestroy()
+        {
+            if (groundTexture != null)
+            {
+                Destroy(groundTexture);
+            }
         }
 
         private void BuildPod(CrashSiteLayout layout)
