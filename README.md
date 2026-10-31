@@ -12,7 +12,8 @@ Koop-Weltraumspiel für 2–4 Spieler: freie Erkundung, Survival, Basisbau und L
 ## Projekt öffnen
 
 1. Repo klonen, z. B. mit [GitHub Desktop](https://desktop.github.com/).
-2. Im Unity Hub: **Add → Add project from disk** und den Ordner `Onyx` im Repo wählen.
+2. **Doppelklick auf `Onyx-starten.bat`** im Repo-Ordner – öffnet Unity immer mit dem richtigen Projekt.
+   Alternativ im Unity Hub: **Add → Add project from disk** und den Ordner `Onyx` wählen (nicht „New project“!).
 3. Editor-Version: **6000.6.7f1**. Alle im Team sollten dieselbe Version nutzen; die verwendete Version steht in `Onyx/ProjectSettings/ProjectVersion.txt`.
 
 `Library/`, `Temp/`, `Logs/` und `UserSettings/` erzeugt Unity lokal; sie werden über die `.gitignore` aus dem Repo herausgehalten.
