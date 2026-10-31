@@ -55,6 +55,23 @@ namespace Onyx.Core.Persistence
             }
 
             var world = WorldState.CreateNew(data.Seed);
+            Apply(world, data);
+            return world;
+        }
+
+        /// <summary>
+        /// Überträgt einen Stand auf eine vorhandene Welt mit gleichem Seed – z. B. bei Mitspielern,
+        /// die laufend den Stand des Hosts bekommen, ohne dass Gelände und Grafik neu entstehen.
+        /// </summary>
+        public static void Apply(WorldState world, WorldSaveData data)
+        {
+            if (world == null) throw new ArgumentNullException(nameof(world));
+            if (data == null) throw new SaveFormatException("Leerer Spielstand.");
+            if (data.Seed != world.Seed)
+            {
+                throw new SaveFormatException($"Stand gehört zu Seed {data.Seed}, die Welt hat Seed {world.Seed}.");
+            }
+
             world.Clock.Restore(data.TimeOfDay, data.DayCount);
 
             // Reihenfolge: Schiff zuerst (setzt Tankgröße), dann Reparaturen (Antrieb → Reichweite), zuletzt Treibstoff.
@@ -74,12 +91,10 @@ namespace Onyx.Core.Persistence
 
             if (data.DiscoveredSystems != null)
             {
-                foreach (int id in data.DiscoveredSystems)
+                var discovered = new HashSet<int>(data.DiscoveredSystems);
+                foreach (var system in world.Galaxy.Systems)
                 {
-                    if (id >= 0 && id < world.Galaxy.Systems.Count)
-                    {
-                        world.Galaxy.GetSystem(id).Discovered = true;
-                    }
+                    system.Discovered = discovered.Contains(system.Id);
                 }
             }
 
@@ -87,8 +102,6 @@ namespace Onyx.Core.Persistence
             {
                 world.Navigation.Restore(data.CurrentSystemId, data.Fuel, data.OrbitPlanetId);
             }
-
-            return world;
         }
 
         // ------------------------------------------------------------------ Schiff

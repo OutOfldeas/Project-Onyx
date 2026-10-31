@@ -61,9 +61,15 @@ namespace Onyx.Game.UI
             white.Apply();
         }
 
+        private void OnEnable()
+        {
+            WorldSync.JumpAnswered += OnJumpAnswered;
+        }
+
         private void OnDisable()
         {
             IsOpen = false;
+            WorldSync.JumpAnswered -= OnJumpAnswered;
         }
 
         private void OnDestroy()
@@ -164,16 +170,39 @@ namespace Onyx.Game.UI
 
         private void Jump(int target)
         {
+            // In einer Sitzung springt der Host; Mitspieler fragen an und bekommen den neuen Stand geschickt.
+            if (WorldSync.Active)
+            {
+                WorldSync.Instance.RequestJump(target);
+                if (!WorldSync.Instance.IsServer)
+                {
+                    Flash("Sprung beim Host angefragt …");
+                }
+
+                return;
+            }
+
+            // Ohne Sitzung (z. B. Testgelände): lokal springen.
             int from = Nav.CurrentSystemId;
             bool newSystem = !world.Galaxy.GetSystem(target).Discovered;
             JumpResult result = Nav.Jump(target);
+            if (result == JumpResult.Ok && newSystem)
+            {
+                GameSession.Instance.Character.AddExperience(Onyx.Core.Skills.Discipline.Exploration, Onyx.Core.Skills.SkillEffects.ExplorationExperiencePerSystem);
+            }
+
+            OnJumpAnswered(result, from, target);
+        }
+
+        private void OnJumpAnswered(JumpResult result, int from, int target)
+        {
+            if (world == null)
+            {
+                return;
+            }
+
             if (result == JumpResult.Ok)
             {
-                if (newSystem)
-                {
-                    GameSession.Instance.Character.AddExperience(Onyx.Core.Skills.Discipline.Exploration, Onyx.Core.Skills.SkillEffects.ExplorationExperiencePerSystem);
-                }
-
                 Flash($"Gesprungen: {world.Galaxy.GetSystem(from).Name} nach {world.Galaxy.GetSystem(target).Name}");
                 FollowRoute();
             }

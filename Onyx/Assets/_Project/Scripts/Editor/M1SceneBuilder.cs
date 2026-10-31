@@ -1,5 +1,6 @@
 using System.Reflection;
 using Onyx.Game.CrashSite;
+using Onyx.Game.Session;
 using Unity.Netcode;
 using UnityEditor;
 using UnityEditor.SceneManagement;
@@ -11,7 +12,7 @@ namespace Onyx.Editor
     /// <summary>
     /// Legt per Menü die Szene für M1 an: die Absturzstelle mit Fluchtkapsel und Fregattenwrack.
     /// Gelände, Wrack und Lichter entstehen zur Laufzeit aus dem Seed (CrashSiteView);
-    /// in der Szene liegt nur der Netzwerk-Anker <see cref="CrashSiteNet"/>.
+    /// in der Szene liegen nur die Netzwerk-Anker <see cref="CrashSiteNet"/> und <see cref="WorldSync"/>.
     /// Erneutes Ausführen überschreibt Szene und Spieler-Prefab.
     /// </summary>
     public static class M1SceneBuilder
@@ -39,6 +40,7 @@ namespace Onyx.Editor
             var site = new GameObject("CrashSite");
             var networkObject = site.AddComponent<NetworkObject>();
             site.AddComponent<CrashSiteNet>();
+            site.AddComponent<WorldSync>();
 
             // Szene zuerst speichern: Erst dann kann Netcode dem Objekt eine feste ID geben.
             EditorSceneManager.SaveScene(scene, ScenePath);

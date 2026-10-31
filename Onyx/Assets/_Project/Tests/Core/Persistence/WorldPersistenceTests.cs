@@ -146,6 +146,41 @@ namespace Onyx.Core.Tests.Persistence
         }
 
         [Test]
+        public void Apply_UpdatesExistingWorldInPlace()
+        {
+            var host = ChangedWorld();
+            var client = WorldState.CreateNew(host.Seed);
+            var clientSite = client.CrashSite;
+
+            WorldPersistence.Apply(client, WorldPersistence.Capture(host));
+
+            Assert.That(client.CrashSite, Is.SameAs(clientSite), "Gelände bleibt dasselbe Objekt");
+            Assert.That(client.Navigation.CurrentSystemId, Is.EqualTo(host.Navigation.CurrentSystemId));
+            Assert.That(client.Ship.Modules.Count, Is.EqualTo(host.Ship.Modules.Count));
+            Assert.That(client.CrashSite.IsRepaired(StationKind.OxygenGenerator), Is.True);
+        }
+
+        [Test]
+        public void Apply_ForgetsSystemsTheHostHasNotSeen()
+        {
+            var host = WorldState.CreateNew(5);
+            var client = WorldState.CreateNew(5);
+            foreach (var system in client.Galaxy.Systems) system.Discovered = true;
+
+            WorldPersistence.Apply(client, WorldPersistence.Capture(host));
+
+            Assert.That(client.Galaxy.Systems.Count(s => s.Discovered), Is.EqualTo(host.Galaxy.Systems.Count(s => s.Discovered)));
+        }
+
+        [Test]
+        public void Apply_WrongSeed_Throws()
+        {
+            var data = WorldPersistence.Capture(WorldState.CreateNew(1));
+
+            Assert.Throws<SaveFormatException>(() => WorldPersistence.Apply(WorldState.CreateNew(2), data));
+        }
+
+        [Test]
         public void SavedAt_IsIsoTimestamp()
         {
             var data = WorldPersistence.Capture(WorldState.CreateNew(1), 0f, new DateTime(2026, 10, 31, 17, 0, 0, DateTimeKind.Utc));
