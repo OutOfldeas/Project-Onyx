@@ -37,6 +37,9 @@
 *.ttf      binary
 *.otf      binary
 
+# Shell-Skripte brauchen LF
+*.sh text eol=lf
+
 # Windows-Skripte brauchen CRLF
 *.bat text eol=crlf
 *.cmd text eol=crlf
