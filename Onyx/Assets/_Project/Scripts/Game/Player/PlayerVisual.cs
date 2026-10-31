@@ -1,4 +1,7 @@
 using Onyx.Core.Art;
+using Onyx.Core.Audio;
+using Onyx.Core.CrashSite;
+using Onyx.Game.Audio;
 using Onyx.Game.CrashSite;
 using Onyx.Game.Session;
 using Unity.Netcode;
@@ -27,6 +30,7 @@ namespace Onyx.Game.Player
         private Facing facing = Facing.Down;
         private float animationTime;
         private float stillFor;
+        private int lastFrame;
 
         /// <summary>Laufbilder pro Sekunde.</summary>
         private const float FramesPerSecond = 8f;
@@ -114,6 +118,21 @@ namespace Onyx.Game.Player
             int frame = animationTime > 0f ? 1 + (int)(animationTime * FramesPerSecond) % 4 : 0;
             if (frame == 4) frame = 0;
             spriteRenderer.sprite = CharacterSprites.Get(roleColor, facing, frame % CharacterArt.Frames);
+
+            // Schrittgeräusch, sobald ein Fuß aufsetzt (Bild 1 und 3)
+            if (frame != lastFrame && (frame == 1 || frame == 3))
+            {
+                PlayStep(position);
+            }
+
+            lastFrame = frame;
+        }
+
+        private static void PlayStep(Vector3 position)
+        {
+            var site = CrashSiteNet.ActiveSite;
+            bool metal = site != null && site.Layout.ZoneAt(position.x, position.y) != SiteZone.Outside;
+            GameAudio.PlayAt(metal ? Sfx.StepMetal : Sfx.StepSand, position, 0.45f, Random.Range(0.93f, 1.07f), Random.Range(0, SoundSynth.StepVariants));
         }
     }
 }

@@ -265,6 +265,20 @@ namespace Onyx.Game.DevTools
                 return $"Spielstand gelöscht, neue Welt mit Seed {seed}.";
             });
 
+            registry.Register("volume", "volume <0-100>", "Gesamtlautstärke (wird gespeichert).", args =>
+            {
+                Onyx.Game.Audio.GameAudio.Volume = DevCommandRegistry.Float(args, 0, "prozent") / 100f;
+                return $"Lautstärke {Onyx.Game.Audio.GameAudio.Volume * 100f:0} %.";
+            });
+
+            registry.Register("sound", "sound <name>", "Spielt ein Geräusch ab (StepSand, StepMetal, Ratchet, RepairDone, LevelUp, OxygenAlarm, Downed, Revived).", args =>
+            {
+                string name = DevCommandRegistry.Text(args, 0, "name");
+                if (!System.Enum.TryParse(name, true, out Onyx.Core.Audio.Sfx sound)) return $"Unbekanntes Geräusch „{name}“.";
+                Onyx.Game.Audio.GameAudio.Play(sound);
+                return $"Spiele {sound}.";
+            });
+
             registry.Register("clear", "clear", "Leert die Konsole.", _ =>
             {
                 log.Clear();

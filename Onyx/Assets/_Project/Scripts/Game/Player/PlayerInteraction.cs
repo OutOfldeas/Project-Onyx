@@ -1,4 +1,6 @@
+using Onyx.Core.Audio;
 using Onyx.Core.CrashSite;
+using Onyx.Game.Audio;
 using Onyx.Game.CrashSite;
 using Onyx.Game.DevTools;
 using Onyx.Game.UI;
@@ -24,6 +26,7 @@ namespace Onyx.Game.Player
 
         // Was der Besitzer gerade tut (für Anzeige und um Ende zu melden)
         private int workingStation = -1;
+        private float ratchetCooldown;
         private PlayerVitals revivingTarget;
 
         /// <summary>Text für das HUD, z. B. „[E] halten: Reaktor reparieren“. null = nichts in Reichweite.</summary>
@@ -117,6 +120,13 @@ namespace Onyx.Game.Player
                 {
                     workingStation = station.Index;
                     RepairRpc(station.Index, true);
+                }
+
+                ratchetCooldown -= Time.deltaTime;
+                if (ratchetCooldown <= 0f)
+                {
+                    GameAudio.Play(Sfx.Ratchet, 0.4f, Random.Range(0.9f, 1.1f));
+                    ratchetCooldown = 0.34f;
                 }
             }
             else

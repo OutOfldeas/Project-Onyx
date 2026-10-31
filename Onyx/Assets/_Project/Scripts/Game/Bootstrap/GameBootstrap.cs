@@ -1,3 +1,4 @@
+using Onyx.Game.Audio;
 using Onyx.Game.DevTools;
 using Onyx.Game.Session;
 using Onyx.Game.UI;
@@ -41,6 +42,7 @@ namespace Onyx.Game.Bootstrap
             Root.AddComponent<StarMapScreen>();
             Root.AddComponent<GameHud>();
             Root.AddComponent<SkillTreeScreen>();
+            Root.AddComponent<GameAudio>();
 
             // Dev-Modus nur im Editor und in Entwickler-Builds.
             if (Debug.isDebugBuild)

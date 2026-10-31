@@ -99,8 +99,8 @@ gantt
 
 | Spur | Nächste Schritte |
 |---|---|
-| **Grafik** | Tileset Rostwüste (Boden, Felsen, Wrackteile), Spielerfigur 16 × 32 mit 4-Richtungen-Laufanimation, Fluchtkapsel, Fregatten-Wrack, HUD-Elemente |
-| **Audio** | Platzhalter-Sounds (Schritte, Reparatur, Alarm), später eigene Musik |
+| **Grafik** | ✅ Absturzstelle (Boden, Felsen, Kapsel, Wrack, Brandspur), Spielfigur 16 × 32 mit Laufanimation, Konsolen, Schatten · offen: weitere Biome, Schiffsinnenraum, Animationen fürs Reparieren |
+| **Audio** | ✅ Erzeugte Retro-Geräusche (Schritte auf Sand/Metall, Ratsche, Meldungen, Sauerstoff-Alarm, Wind) · offen: Musik, Geräusche für Raids und Schiff |
 | **Infrastruktur** | Steam-App-ID (100 $ Steam Direct), Build-Pipeline für Test-Builds, Crash-Logs |
 | **Team** | ✅ Unity Smart Merge (`Team-Setup.bat`), Team-Leitfaden (`docs/Team.md`), `CLAUDE.md` · offen: GitHub Issues pro Paket, Collaborator einladen |
 
