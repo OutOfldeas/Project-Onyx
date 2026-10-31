@@ -69,6 +69,14 @@ namespace Onyx.Core.Tests.DevTools
         }
 
         [Test]
+        public void Range_SetsJumpRange()
+        {
+            registry.Execute("range 33,5");
+
+            Assert.That(world.Navigation.JumpRange, Is.EqualTo(33.5f).Within(0.001f));
+        }
+
+        [Test]
         public void NewWorld_ReplacesWorld()
         {
             registry.Execute("newworld 777");

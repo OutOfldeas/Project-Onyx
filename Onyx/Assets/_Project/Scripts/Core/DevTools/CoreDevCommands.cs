@@ -85,6 +85,13 @@ namespace Onyx.Core.DevTools
                 return $"Treibstoff {fuel.Current:0}/{fuel.Max:0}.";
             });
 
+            registry.Register("range", "range <reichweite>", "Setzt die Sprungreichweite (bis zur nächsten Änderung am Schiff).", args =>
+            {
+                var nav = getWorld().Navigation;
+                nav.JumpRange = System.Math.Max(0f, DevCommandRegistry.Float(args, 0, "reichweite"));
+                return $"Sprungreichweite {nav.JumpRange:0.0}.";
+            });
+
             registry.Register("reveal", "reveal", "Deckt alle Systeme auf.", _ =>
             {
                 foreach (var s in getWorld().Galaxy.Systems) s.Discovered = true;

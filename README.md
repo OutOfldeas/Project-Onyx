@@ -22,3 +22,4 @@ Koop-Weltraumspiel für 2–4 Spieler: freie Erkundung, Survival, Basisbau und L
 
 - [Game Design Document](docs/GDD.md)
 - [Architektur und Regeln für Code, Git und Unity](docs/Architektur.md)
+- [Roadmap: Phasen und nächste Schritte](docs/Roadmap.md)

@@ -1,4 +1,5 @@
 using Onyx.Game.DevTools;
+using Onyx.Game.UI;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -25,7 +26,7 @@ namespace Onyx.Game.Player
 
         private void Update()
         {
-            if (!IsSpawned || !IsOwner || DevMode.BlocksGameplayInput)
+            if (!IsSpawned || !IsOwner || DevMode.BlocksGameplayInput || StarMapScreen.IsOpen)
             {
                 return;
             }

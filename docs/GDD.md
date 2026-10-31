@@ -227,6 +227,8 @@ Siehe Art-Direction-Board (Design-Canvas „Art Direction – Koop-Weltraumspiel
 
 ## 9. Roadmap
 
+> Ausführlich mit Phasen und nächsten Schritten: **[Roadmap.md](Roadmap.md)**. Hier nur die Meilensteine von Phase 1.
+
 | Meilenstein | Inhalt | Frage, die er beantwortet |
 |---|---|---|
 | **M0a** | Zwei Spieler verbinden sich per IP und laufen gemeinsam über eine Tilemap (Platzhalter-Grafik, Pixel Perfect Camera) | Steht das Netzwerk-Fundament? |
@@ -236,7 +238,8 @@ Siehe Art-Direction-Board (Design-Canvas „Art Direction – Koop-Weltraumspiel
 | **M3** | Disziplin Technik mit Lernen durch Tun und ersten Skillknoten | Macht Lernen durch Tun Spaß? |
 | **Playtest 1** | Gemeinsam spielen, auswerten | Weiter so oder umsteuern? |
 | parallel | Kernlogik und Dev-Modus für Galaxie, Reisen, Skilltree, Schiffswerft (siehe 10 und 11) | Sind die Systeme stimmig, bevor es echte Oberflächen gibt? |
-| danach | Echte UI für Sternenkarte, Werft und Skilltree; Basisbau, Logistik, Fraktionen, Raids | – |
+| ✅ | Sternenkarte im Spiel (Taste M) im Art-Direction-Stil | Trägt der Look auch im Spiel? |
+| danach | Echte UI für Werft und Skilltree; begehbares Schiff, Planeten, Fraktionen, Raids | – |
 
 ## 10. Systeme: Galaxie, Reisen, Werft
 

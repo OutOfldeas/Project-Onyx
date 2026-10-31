@@ -1,5 +1,6 @@
 using Onyx.Game.DevTools;
 using Onyx.Game.Session;
+using Onyx.Game.UI;
 using Onyx.Game.World;
 using UnityEngine;
 
@@ -36,6 +37,7 @@ namespace Onyx.Game.Bootstrap
             Object.DontDestroyOnLoad(Root);
             Root.AddComponent<GameSession>();
             Root.AddComponent<WorldLighting>();
+            Root.AddComponent<StarMapScreen>();
 
             // Dev-Modus nur im Editor und in Entwickler-Builds.
             if (Debug.isDebugBuild)
