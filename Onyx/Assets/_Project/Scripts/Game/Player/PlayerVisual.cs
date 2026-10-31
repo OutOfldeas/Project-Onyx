@@ -1,4 +1,5 @@
 using Onyx.Core.Art;
+using Onyx.Game.CrashSite;
 using Onyx.Game.Session;
 using Unity.Netcode;
 using UnityEngine;
@@ -42,6 +43,14 @@ namespace Onyx.Game.Player
             roleColor = RoleColors.ForSlot(OwnerClientId);
             spriteRenderer.sprite = CharacterSprites.Get(roleColor, facing, 0);
             lastPosition = transform.position;
+
+            // Schatten am Boden, unter allen Figuren und Objekten
+            var shadowGo = new GameObject("Schatten");
+            shadowGo.transform.SetParent(transform, false);
+            shadowGo.transform.localPosition = new Vector3(0f, 0.05f, 0f);
+            var shadowRenderer = shadowGo.AddComponent<SpriteRenderer>();
+            shadowRenderer.sprite = SiteTileArt.Shadow();
+            shadowRenderer.sortingOrder = -50;
 
             var lampGo = new GameObject("Helmlampe");
             lampGo.transform.SetParent(transform, false);

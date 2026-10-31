@@ -113,4 +113,22 @@ namespace Onyx.Core.Tests.Art
             Assert.That(CharacterArt.Render(Facing.Down, 4, Role).Pixels, Is.EqualTo(stand.Pixels), "Bilder wiederholen sich");
         }
     }
+
+    public class StationArtTests
+    {
+        [TestCase(StationKind.OxygenGenerator)]
+        [TestCase(StationKind.Reactor)]
+        [TestCase(StationKind.Engine)]
+        public void RepairedLooksDifferent_AndShowsGlow(StationKind kind)
+        {
+            var broken = StationArt.Render(kind, false);
+            var repaired = StationArt.Render(kind, true);
+
+            Assert.That(broken.Width, Is.EqualTo(16));
+            Assert.That(broken.Height, Is.EqualTo(24));
+            Assert.That(repaired.Pixels, Is.Not.EqualTo(broken.Pixels));
+            Assert.That(broken.Pixels, Does.Contain(Rust.Red), "kaputt: rote Anzeige");
+            Assert.That(repaired.Pixels, Does.Contain(Rust.Lime), "läuft: grüne Anzeige");
+        }
+    }
 }
