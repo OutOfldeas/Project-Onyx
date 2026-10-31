@@ -167,6 +167,32 @@ namespace Onyx.Core.Skills
             return result;
         }
 
+        /// <summary>Stellt eine Disziplin aus einem Spielstand wieder her (ohne Ereignisse und Prüfungen).</summary>
+        public void RestoreDiscipline(Discipline d, int level, float experienceInLevel, SkillLock mode)
+        {
+            levels[d] = Math.Max(0, Math.Min(MaxLevel, level));
+            experience[d] = Math.Max(0f, experienceInLevel);
+            locks[d] = mode;
+        }
+
+        /// <summary>Stellt freigeschaltete Fähigkeiten aus einem Spielstand wieder her. Unbekannte IDs werden übersprungen.</summary>
+        /// <returns>Anzahl der übernommenen Fähigkeiten.</returns>
+        public int RestoreUnlocked(IEnumerable<string> nodeIds)
+        {
+            unlocked.Clear();
+            int count = 0;
+            foreach (string id in nodeIds)
+            {
+                if (tree.Contains(id))
+                {
+                    unlocked.Add(id);
+                    count++;
+                }
+            }
+
+            return count;
+        }
+
         /// <summary>Setzt eine Stufe direkt (Dev-Modus, Tests). Hält die Obergrenze nicht ein.</summary>
         public void DebugSetLevel(Discipline d, int level)
         {

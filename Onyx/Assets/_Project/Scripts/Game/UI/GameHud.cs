@@ -93,6 +93,12 @@ namespace Onyx.Game.UI
                 gui.Text(PixelGui.Width / 2f, 62, message, messageColor, TextAnchor.UpperCenter);
             }
 
+            var saves = SaveSystem.Instance;
+            if (saves != null && Time.unscaledTime - saves.LastSavedAt < 2.5f)
+            {
+                gui.Text(PixelGui.Width - 8, PixelGui.Height - 12, "Gespeichert", PixelGui.Steel2, TextAnchor.UpperRight);
+            }
+
             if (Time.unscaledTime - shownSince < HintSeconds)
             {
                 gui.Text(8, PixelGui.Height - 12, "WASD laufen · E halten: reparieren · M Karte · F1 Dev", PixelGui.Steel2);

@@ -62,6 +62,8 @@ Der Unterstrich in `_Project` sorgt dafür, dass unsere Inhalte oben stehen und 
 
 - **`WorldState`** (Core) bündelt den Spielstand einer Welt: Galaxie, Schiffsbauplan und -werte, Navigation, Tageszeit, Skills.
 - **`GameSession`** (Game) hält den `WorldState`, lässt ihn pro Frame laufen und hängt am dauerhaften Objekt `[Onyx]`.
+- **Speichern:** `WorldPersistence` (Core, getestet) wandelt den `WorldState` in reine Datenklassen (`WorldSaveData`) um und zurück. Gespeichert wird nur, was Spieler verändert haben; Galaxie und Gelände entstehen beim Laden wieder aus dem Seed. `SaveSystem` (Game) schreibt sie als JSON nach `Application.persistentDataPath/Saves/welt.json` (unter Windows `%USERPROFILE%\AppData\LocalLow\<Firma>\Onyx\Saves`), mit Zwischendatei und `.bak`. Der Host speichert jede Minute, nach Reparaturen und beim Beenden; Mitspieler speichern nicht. Neue Felder in den Datenklassen hinten anfügen; bei inkompatiblen Änderungen `CurrentVersion` erhöhen.
+- **Absturzstelle im Netzwerk:** `CrashSiteNet` liegt als Netzwerkobjekt in der Szene. Der Host rechnet Reparaturen, Tageszeit und Lebenserhaltung (`PlayerVitals`) und verteilt die Ergebnisse; Spieler melden Handlungen per RPC über ihr Spielerobjekt (`PlayerInteraction`).
 - **Dev-Modus** (`DevMode`, Taste F1): nur im Editor und in Entwickler-Builds. Die Befehle der Kernlogik liegen in `CoreDevCommands` (Core, getestet), Unity-spezifische Befehle (z. B. `tp`, `speed`) in `DevMode`. **Neue Systeme bekommen immer auch Dev-Befehle bzw. einen Bereich im Dev-Fenster.**
 
 ## Inhalte als Daten

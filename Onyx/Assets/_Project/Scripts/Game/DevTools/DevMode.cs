@@ -236,6 +236,35 @@ namespace Onyx.Game.DevTools
                 return PlayerMovement.NoClip ? "Noclip an." : "Noclip aus.";
             });
 
+            registry.Register("save", "save", "Speichert die Welt sofort.", _ =>
+            {
+                var saves = SaveSystem.Instance;
+                if (saves == null) return "Kein Speichersystem.";
+                if (!SaveSystem.MaySave) return "Nur der Host speichert.";
+                saves.Save();
+                return $"{saves.LastMessage}\n{SaveSystem.FilePath}";
+            });
+
+            registry.Register("load", "load", "Lädt den gespeicherten Spielstand.", _ =>
+            {
+                var saves = SaveSystem.Instance;
+                if (saves == null) return "Kein Speichersystem.";
+                if (!SaveSystem.MaySave) return "Nur der Host kann laden.";
+                saves.Load();
+                return saves.LastMessage;
+            });
+
+            registry.Register("wipe", "wipe [seed]", "Löscht den Spielstand und beginnt eine neue Welt.", args =>
+            {
+                var saves = SaveSystem.Instance;
+                if (saves == null) return "Kein Speichersystem.";
+                if (!SaveSystem.MaySave) return "Nur der Host kann das.";
+                saves.Delete();
+                int seed = args.Length > 0 ? DevCommandRegistry.Int(args, 0, "seed") : GameSession.DefaultSeed;
+                CurrentSession.ReplaceWorld(WorldState.CreateNew(seed));
+                return $"Spielstand gelöscht, neue Welt mit Seed {seed}.";
+            });
+
             registry.Register("clear", "clear", "Leert die Konsole.", _ =>
             {
                 log.Clear();

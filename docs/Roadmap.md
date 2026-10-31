@@ -58,7 +58,7 @@ gantt
 | 1.1 | **Sternenkarte** | Taste M: Pixelkarte im Art-Direction-Stil (Fraktionsgebiete, Sprungwege, Route, Schiffsposition), System wählen, Route planen, springen | ✅ erste Version |
 | 1.2 | **M1 Absturzstelle** | Gelände aus Seed (Platzhalter-Tiles Rostwüste), Kapsel füllt Sauerstoff, HUD für O2/Schild/Leben, begehbares Fregattenwrack mit drei kaputten Systemen (Sauerstoffgenerator → Luft im Wrack, Reaktor → Strom und Licht, Antrieb → Sprung möglich), gemeinsam reparieren mit E, Nachtkälte, Wiederbeleben, Rettung zur Kapsel | 🔨 spielbar, wartet auf Playtest |
 | 1.3 | **M0b Steam** | Steamworks (Facepunch.Steamworks), Lobby + Einladen über Freunde-Liste, Steam-Transport statt IP | ⏳ braucht App-ID |
-| 1.4 | **M2 Geteilte Welt** | Spielstand speichern/laden (Welt in Abschnitten), jeder kann hosten, Sperre gegen doppeltes Hosten | 💤 |
+| 1.4 | **M2 Geteilte Welt** | ✅ Spielstand speichern/laden beim Host (Autosave, JSON). Offen: Mitspieler bekommen den ganzen Stand (Schiff, Navigation), Spielerfiguren mit eigenen Skills, Welt teilen, sodass jeder hosten kann, Sperre gegen doppeltes Hosten | 🔨 |
 | 1.5 | **M3 Skills im Spiel** | Reparieren gibt Technik-EP, erste Knoten wirken (schneller reparieren, Feldreparatur), Skilltree-Bildschirm im Stil der Sternenkarte | 💤 |
 | 1.6 | **Playtest 1** | Zu zweit/zu dritt eine Stunde spielen, Notizen, Entscheidung | 💤 |
 

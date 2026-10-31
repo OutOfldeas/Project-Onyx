@@ -178,6 +178,21 @@ namespace Onyx.Core.Galaxy
             return false;
         }
 
+        /// <summary>Stellt Position, Tankinhalt und Umlaufbahn aus einem Spielstand wieder her.</summary>
+        public void Restore(int systemId, float fuel, string orbitPlanetId)
+        {
+            map.GetSystem(systemId);
+            CurrentSystemId = systemId;
+            Discover(systemId);
+            Fuel.Drain(Fuel.Max);
+            Fuel.Refill(Math.Max(0f, fuel));
+            OrbitPlanetId = null;
+            if (!string.IsNullOrEmpty(orbitPlanetId))
+            {
+                EnterOrbit(orbitPlanetId);
+            }
+        }
+
         /// <summary>Teleport für Tests und Dev-Modus; ignoriert Verbindungen und Treibstoff.</summary>
         public void DebugSetSystem(int systemId)
         {

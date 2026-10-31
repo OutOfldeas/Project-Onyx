@@ -36,6 +36,7 @@ namespace Onyx.Game.Bootstrap
             Root = new GameObject(RootName);
             Object.DontDestroyOnLoad(Root);
             Root.AddComponent<GameSession>();
+            Root.AddComponent<SaveSystem>();
             Root.AddComponent<WorldLighting>();
             Root.AddComponent<StarMapScreen>();
             Root.AddComponent<GameHud>();

@@ -60,6 +60,13 @@ namespace Onyx.Core.World
             TimeOfDay = t - fullDays;
         }
 
+        /// <summary>Stellt Tageszeit und Tageszähler aus einem Spielstand wieder her.</summary>
+        public void Restore(float timeOfDay, int dayCount)
+        {
+            TimeOfDay = Wrap(timeOfDay);
+            DayCount = Math.Max(0, dayCount);
+        }
+
         /// <summary>Setzt die Tageszeit direkt (z. B. beim Laden oder zum Testen).</summary>
         public void SetTimeOfDay(float timeOfDay)
         {
