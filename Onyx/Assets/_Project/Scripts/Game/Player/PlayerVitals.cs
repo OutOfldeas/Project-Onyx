@@ -45,6 +45,9 @@ namespace Onyx.Game.Player
         private readonly NetworkVariable<float> reviveProgress = new NetworkVariable<float>();
 
         private LifeSupport life;
+        private LifeSupportSettings settings;
+        private PlayerCharacter character;
+        private float baseOxygenUse;
         private readonly HashSet<ulong> revivers = new HashSet<ulong>();
 
         /// <summary>Dev-Modus: nichts verbraucht sich (nur beim Host wirksam).</summary>
@@ -67,7 +70,10 @@ namespace Onyx.Game.Player
 
             if (IsServer)
             {
-                life = new LifeSupport();
+                settings = new LifeSupportSettings();
+                baseOxygenUse = settings.OxygenUsePerSecond;
+                life = new LifeSupport(settings);
+                character = GetComponent<PlayerCharacter>();
             }
         }
 
@@ -103,6 +109,8 @@ namespace Onyx.Game.Player
                 env = Classify(site.Layout.ZoneAt(p.x, p.y), surroundings);
             }
 
+            // Fähigkeiten des Spielers (z. B. „Leichter Schritt“) wirken auf den Verbrauch.
+            settings.OxygenUsePerSecond = baseOxygenUse * (character != null ? character.OxygenUseFactor : 1f);
             life.Tick(Time.deltaTime, surroundings);
             if (GodMode)
             {

@@ -28,7 +28,7 @@ namespace Onyx.Game.Player
 
         private void Update()
         {
-            if (!IsSpawned || !IsOwner || DevMode.BlocksGameplayInput || StarMapScreen.IsOpen)
+            if (!IsSpawned || !IsOwner || GameplayInput.Blocked)
             {
                 return;
             }

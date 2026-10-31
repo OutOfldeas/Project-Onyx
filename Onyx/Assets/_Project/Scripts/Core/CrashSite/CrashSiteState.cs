@@ -122,12 +122,12 @@ namespace Onyx.Core.CrashSite
         }
 
         /// <returns>Die insgesamt geleistete Arbeit in diesem Schritt.</returns>
-        public float Tick(float deltaSeconds, Func<ulong, float> speedOf = null)
+        public float Tick(float deltaSeconds, Func<ulong, float> speedOf = null, Action<ulong, float> workDone = null)
         {
             float work = 0f;
             foreach (var job in jobs)
             {
-                work += job.Tick(deltaSeconds, speedOf);
+                work += job.Tick(deltaSeconds, speedOf, workDone);
             }
 
             return work;

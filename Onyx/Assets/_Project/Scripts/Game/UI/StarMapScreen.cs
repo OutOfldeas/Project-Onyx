@@ -23,6 +23,8 @@ namespace Onyx.Game.UI
         /// <summary>true, solange die Karte offen ist – die Figur bleibt dann stehen.</summary>
         public static bool IsOpen { get; private set; }
 
+        public static void Close() => IsOpen = false;
+
         private const int W = StarMapRasterizer.Width;
         private const int H = StarMapRasterizer.Height;
         private const int PanelX = 304;
@@ -83,6 +85,7 @@ namespace Onyx.Game.UI
             if (!typing && keyboard.mKey.wasPressedThisFrame)
             {
                 IsOpen = !IsOpen;
+                if (IsOpen) SkillTreeScreen.Close();
             }
             else if (IsOpen && keyboard.escapeKey.wasPressedThisFrame)
             {
@@ -162,9 +165,15 @@ namespace Onyx.Game.UI
         private void Jump(int target)
         {
             int from = Nav.CurrentSystemId;
+            bool newSystem = !world.Galaxy.GetSystem(target).Discovered;
             JumpResult result = Nav.Jump(target);
             if (result == JumpResult.Ok)
             {
+                if (newSystem)
+                {
+                    GameSession.Instance.Character.AddExperience(Onyx.Core.Skills.Discipline.Exploration, Onyx.Core.Skills.SkillEffects.ExplorationExperiencePerSystem);
+                }
+
                 Flash($"Gesprungen: {world.Galaxy.GetSystem(from).Name} nach {world.Galaxy.GetSystem(target).Name}");
                 FollowRoute();
             }

@@ -81,8 +81,11 @@ namespace Onyx.Core.Interaction
         /// Liefert das Arbeitstempo eines Spielers (1 = ungeübt). Später hängt es von der
         /// Disziplin Technik ab. null = alle arbeiten mit Tempo 1.
         /// </param>
-        /// <returns>Die in diesem Schritt geleistete Arbeit (z. B. als Grundlage für Erfahrungspunkte).</returns>
-        public float Tick(float deltaSeconds, Func<ulong, float> speedOf = null)
+        /// <param name="workDone">
+        /// Wird für jeden Helfer mit seinem Anteil an der Arbeit aufgerufen (Grundlage für Erfahrungspunkte).
+        /// </param>
+        /// <returns>Die in diesem Schritt geleistete Arbeit.</returns>
+        public float Tick(float deltaSeconds, Func<ulong, float> speedOf = null, Action<ulong, float> workDone = null)
         {
             if (deltaSeconds < 0f || float.IsNaN(deltaSeconds))
             {
@@ -103,6 +106,15 @@ namespace Onyx.Core.Interaction
             float teamBonus = 1f + TeamBonusPerExtraWorker * (workers.Count - 1);
             float work = Math.Min(combinedSpeed * teamBonus * deltaSeconds, RequiredWork - Progress);
             Progress += work;
+
+            if (workDone != null && combinedSpeed > 0f)
+            {
+                foreach (ulong worker in workers)
+                {
+                    float share = Math.Max(0f, speedOf?.Invoke(worker) ?? 1f) / combinedSpeed;
+                    workDone(worker, work * share);
+                }
+            }
 
             if (IsComplete)
             {

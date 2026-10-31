@@ -1,5 +1,6 @@
 using System;
 using Onyx.Core.Session;
+using Onyx.Core.Skills;
 using UnityEngine;
 
 namespace Onyx.Game.Session
@@ -18,6 +19,12 @@ namespace Onyx.Game.Session
 
         public WorldState World { get; private set; }
 
+        /// <summary>
+        /// Der Charakter des Spielers an diesem Rechner. Gehört dem Spieler, nicht der Welt:
+        /// Er wird in jede geladene oder beigetretene Welt mitgenommen und separat gespeichert.
+        /// </summary>
+        public CharacterSkills Character { get; private set; }
+
         /// <summary>Zeitraffer für die Simulation (Dev-Modus). 1 = Echtzeit.</summary>
         public float TimeScale { get; set; } = 1f;
 
@@ -28,6 +35,7 @@ namespace Onyx.Game.Session
         {
             Instance = this;
             World = WorldState.CreateNew(DefaultSeed);
+            Character = World.LocalSkills;
         }
 
         private void OnDestroy()
@@ -46,6 +54,7 @@ namespace Onyx.Game.Session
         public void ReplaceWorld(WorldState world)
         {
             World = world ?? throw new ArgumentNullException(nameof(world));
+            World.AttachLocalCharacter(Character);
             WorldReplaced?.Invoke();
         }
     }

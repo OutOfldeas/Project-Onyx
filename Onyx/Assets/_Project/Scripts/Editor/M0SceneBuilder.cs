@@ -81,6 +81,7 @@ namespace Onyx.Editor
 
             go.AddComponent<SpriteRenderer>();
             go.AddComponent<PlayerVitals>();
+            go.AddComponent<PlayerCharacter>();
             go.AddComponent<PlayerVisual>();
             go.AddComponent<PlayerMovement>();
             go.AddComponent<PlayerInteraction>();

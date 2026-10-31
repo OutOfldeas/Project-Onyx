@@ -25,11 +25,6 @@ namespace Onyx.Core.Tests.Persistence
             var neighbor = world.Galaxy.LanesOf(world.Navigation.CurrentSystemId).First().Other(world.Navigation.CurrentSystemId);
             world.Navigation.DebugSetSystem(neighbor);
             world.Navigation.Fuel.Drain(5f);
-
-            world.LocalSkills.DebugSetLevel(Discipline.Engineering, 3);
-            world.LocalSkills.AddExperience(Discipline.Engineering, 40f);
-            world.LocalSkills.Unlock("eng.repair1");
-            world.LocalSkills.SetLock(Discipline.Diplomacy, SkillLock.Lower);
             return world;
         }
 
@@ -58,10 +53,6 @@ namespace Onyx.Core.Tests.Persistence
             Assert.That(restored.Galaxy.Systems.Where(s => s.Discovered).Select(s => s.Id),
                 Is.EquivalentTo(original.Galaxy.Systems.Where(s => s.Discovered).Select(s => s.Id)));
 
-            Assert.That(restored.LocalSkills.Level(Discipline.Engineering), Is.EqualTo(3));
-            Assert.That(restored.LocalSkills.Experience(Discipline.Engineering), Is.EqualTo(original.LocalSkills.Experience(Discipline.Engineering)).Within(1e-4f));
-            Assert.That(restored.LocalSkills.IsUnlocked("eng.repair1"), Is.True);
-            Assert.That(restored.LocalSkills.GetLock(Discipline.Diplomacy), Is.EqualTo(SkillLock.Lower));
             Assert.That(data.PlayTimeSeconds, Is.EqualTo(123f));
         }
 
@@ -102,16 +93,56 @@ namespace Onyx.Core.Tests.Persistence
         }
 
         [Test]
-        public void UnknownSkillsAndModules_AreSkipped()
+        public void UnknownModules_AreSkipped()
         {
             var data = WorldPersistence.Capture(WorldState.CreateNew(2));
-            data.LocalCharacter.Unlocked = new[] { "gibt.es.nicht" };
             data.Ship.Modules = data.Ship.Modules.Concat(new[] { new ModuleSaveData { Id = "warpkern9000", X = 1, Y = 1 } }).ToArray();
 
             var world = WorldPersistence.Restore(data);
 
-            Assert.That(world.LocalSkills.Unlocked, Is.Empty);
             Assert.That(world.Ship.Modules.Count, Is.EqualTo(data.Ship.Modules.Length - 1));
+        }
+
+        [Test]
+        public void Character_RoundTrip()
+        {
+            var skills = new CharacterSkills(SkillCatalog.CreateDefault());
+            skills.DebugSetLevel(Discipline.Engineering, 3);
+            skills.AddExperience(Discipline.Engineering, 40f);
+            skills.Unlock("eng.repair1");
+            skills.SetLock(Discipline.Diplomacy, SkillLock.Lower);
+
+            var restored = new CharacterSkills(SkillCatalog.CreateDefault());
+            CharacterPersistence.Restore(restored, CharacterPersistence.Capture(skills));
+
+            Assert.That(restored.Level(Discipline.Engineering), Is.EqualTo(3));
+            Assert.That(restored.Experience(Discipline.Engineering), Is.EqualTo(skills.Experience(Discipline.Engineering)).Within(1e-4f));
+            Assert.That(restored.IsUnlocked("eng.repair1"), Is.True);
+            Assert.That(restored.GetLock(Discipline.Diplomacy), Is.EqualTo(SkillLock.Lower));
+        }
+
+        [Test]
+        public void Character_UnknownSkills_AreSkipped()
+        {
+            var data = CharacterPersistence.Capture(new CharacterSkills(SkillCatalog.CreateDefault()));
+            data.Unlocked = new[] { "gibt.es.nicht" };
+
+            var restored = new CharacterSkills(SkillCatalog.CreateDefault());
+            CharacterPersistence.Restore(restored, data);
+
+            Assert.That(restored.Unlocked, Is.Empty);
+        }
+
+        [Test]
+        public void Character_TravelsWithPlayerIntoNewWorld()
+        {
+            var first = WorldState.CreateNew(1);
+            first.LocalSkills.DebugSetLevel(Discipline.Logistics, 4);
+
+            var second = WorldState.CreateNew(2);
+            second.AttachLocalCharacter(first.LocalSkills);
+
+            Assert.That(second.LocalSkills.Level(Discipline.Logistics), Is.EqualTo(4));
         }
 
         [Test]

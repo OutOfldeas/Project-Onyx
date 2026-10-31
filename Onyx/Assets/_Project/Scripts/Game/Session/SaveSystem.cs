@@ -9,14 +9,17 @@ using UnityEngine;
 namespace Onyx.Game.Session
 {
     /// <summary>
-    /// Speichert und lädt die Welt als JSON-Datei. Beim Start wird ein vorhandener Spielstand
-    /// geladen; danach speichert der Host (oder wer allein spielt) regelmäßig, nach wichtigen
-    /// Ereignissen und beim Beenden. Mitspieler speichern nicht – ihre Welt kommt vom Host.
+    /// Speichert und lädt Welt und Charakter als JSON-Dateien. Beim Start wird beides geladen.
+    /// Die Welt speichert der Host (oder wer allein spielt) regelmäßig, nach wichtigen Ereignissen
+    /// und beim Beenden; Mitspieler speichern keine Welt – sie kommt vom Host. Den eigenen
+    /// Charakter speichert jeder Spieler selbst.
     /// </summary>
     public sealed class SaveSystem : MonoBehaviour
     {
         public const float AutosaveIntervalSeconds = 60f;
         private const string FileName = "welt.json";
+        private const string CharacterFileName = "charakter.json";
+        public const float CharacterSaveIntervalSeconds = 30f;
 
         public static SaveSystem Instance { get; private set; }
 
@@ -24,6 +27,9 @@ namespace Onyx.Game.Session
         public static string Folder => Path.Combine(Application.persistentDataPath, "Saves");
 
         public static string FilePath => Path.Combine(Folder, FileName);
+
+        /// <summary>Der eigene Charakter (Skills) – speichert jeder Spieler selbst, auch als Mitspieler.</summary>
+        public static string CharacterFilePath => Path.Combine(Folder, CharacterFileName);
 
         /// <summary>Zeitpunkt (unscaledTime) der letzten erfolgreichen Speicherung, für die Anzeige.</summary>
         public float LastSavedAt { get; private set; } = -100f;
@@ -33,6 +39,8 @@ namespace Onyx.Game.Session
         private float playTimeSeconds;
         private float nextAutosave;
         private bool saveRequested;
+        private bool characterSaveRequested;
+        private float nextCharacterSave;
 
         private void Awake()
         {
@@ -41,9 +49,20 @@ namespace Onyx.Game.Session
 
         private void Start()
         {
+            if (File.Exists(CharacterFilePath))
+            {
+                LoadCharacter();
+            }
+
             if (File.Exists(FilePath))
             {
                 Load();
+            }
+
+            nextCharacterSave = Time.unscaledTime + CharacterSaveIntervalSeconds;
+            if (GameSession.Instance != null)
+            {
+                GameSession.Instance.Character.LevelChanged += (_, __) => characterSaveRequested = true;
             }
 
             nextAutosave = Time.unscaledTime + AutosaveIntervalSeconds;
@@ -71,9 +90,20 @@ namespace Onyx.Game.Session
             }
         }
 
+        /// <summary>Charakter bald speichern (z. B. nach dem Freischalten einer Fähigkeit).</summary>
+        public void RequestCharacterSave() => characterSaveRequested = true;
+
         private void Update()
         {
             playTimeSeconds += Time.unscaledDeltaTime;
+
+            if (characterSaveRequested || Time.unscaledTime >= nextCharacterSave)
+            {
+                characterSaveRequested = false;
+                nextCharacterSave = Time.unscaledTime + CharacterSaveIntervalSeconds;
+                SaveCharacter();
+            }
+
             if (!MaySave)
             {
                 return;
@@ -89,6 +119,7 @@ namespace Onyx.Game.Session
 
         private void OnApplicationQuit()
         {
+            SaveCharacter();
             if (MaySave)
             {
                 Save();
@@ -106,20 +137,7 @@ namespace Onyx.Game.Session
             try
             {
                 var data = WorldPersistence.Capture(session.World, playTimeSeconds);
-                string json = JsonUtility.ToJson(data, true);
-                Directory.CreateDirectory(Folder);
-
-                // Erst in eine Zwischendatei schreiben, dann austauschen: Ein Absturz beim
-                // Speichern zerstört so nie den letzten guten Spielstand.
-                string temp = FilePath + ".tmp";
-                File.WriteAllText(temp, json);
-                if (File.Exists(FilePath))
-                {
-                    File.Copy(FilePath, FilePath + ".bak", true);
-                    File.Delete(FilePath);
-                }
-
-                File.Move(temp, FilePath);
+                WriteSafely(FilePath, JsonUtility.ToJson(data, true));
                 LastSavedAt = Time.unscaledTime;
                 LastMessage = $"Gespeichert ({DateTime.Now:HH:mm:ss}).";
                 return true;
@@ -157,6 +175,66 @@ namespace Onyx.Game.Session
                 Debug.LogError($"[Onyx] {LastMessage}\n{e}");
                 return false;
             }
+        }
+
+        public bool SaveCharacter()
+        {
+            var session = GameSession.Instance;
+            if (session == null)
+            {
+                return false;
+            }
+
+            try
+            {
+                WriteSafely(CharacterFilePath, JsonUtility.ToJson(CharacterPersistence.Capture(session.Character), true));
+                return true;
+            }
+            catch (Exception e)
+            {
+                Debug.LogError($"[Onyx] Charakter speichern fehlgeschlagen: {e.Message}\n{e}");
+                return false;
+            }
+        }
+
+        public bool LoadCharacter()
+        {
+            var session = GameSession.Instance;
+            if (session == null)
+            {
+                return false;
+            }
+
+            try
+            {
+                var data = JsonUtility.FromJson<CharacterSaveData>(File.ReadAllText(CharacterFilePath));
+                CharacterPersistence.Restore(session.Character, data);
+                Debug.Log("[Onyx] Charakter geladen.");
+                return true;
+            }
+            catch (Exception e)
+            {
+                Debug.LogError($"[Onyx] Charakter laden fehlgeschlagen: {e.Message}\n{e}");
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Erst in eine Zwischendatei schreiben, dann austauschen: Ein Absturz beim Speichern
+        /// zerstört so nie den letzten guten Stand. Die vorherige Fassung bleibt als .bak.
+        /// </summary>
+        private static void WriteSafely(string path, string content)
+        {
+            Directory.CreateDirectory(Path.GetDirectoryName(path));
+            string temp = path + ".tmp";
+            File.WriteAllText(temp, content);
+            if (File.Exists(path))
+            {
+                File.Copy(path, path + ".bak", true);
+                File.Delete(path);
+            }
+
+            File.Move(temp, path);
         }
 
         /// <summary>Löscht den Spielstand (die laufende Welt bleibt, bis eine neue erzeugt wird).</summary>

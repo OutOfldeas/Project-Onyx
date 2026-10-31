@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Onyx.Core.Session;
 using Onyx.Core.Ships;
-using Onyx.Core.Skills;
 
 namespace Onyx.Core.Persistence
 {
@@ -17,7 +16,8 @@ namespace Onyx.Core.Persistence
     /// <summary>
     /// Wandelt einen <see cref="WorldState"/> in Speicherdaten um und zurück. Die Welt selbst
     /// (Galaxie, Gelände) entsteht beim Laden wieder aus dem Seed; gespeichert wird nur,
-    /// was Spieler verändert haben.
+    /// was Spieler verändert haben. Charaktere (Skills) speichert jeder Spieler selbst,
+    /// siehe <see cref="CharacterPersistence"/>.
     /// </summary>
     public static class WorldPersistence
     {
@@ -43,7 +43,6 @@ namespace Onyx.Core.Persistence
                 OrbitPlanetId = nav.OrbitPlanetId ?? string.Empty,
                 DiscoveredSystems = world.Galaxy.Systems.Where(s => s.Discovered).Select(s => s.Id).ToArray(),
                 Ship = CaptureShip(world.Ship),
-                LocalCharacter = CaptureCharacter(world.LocalSkills),
             };
         }
 
@@ -87,11 +86,6 @@ namespace Onyx.Core.Persistence
             if (data.CurrentSystemId >= 0 && data.CurrentSystemId < world.Galaxy.Systems.Count)
             {
                 world.Navigation.Restore(data.CurrentSystemId, data.Fuel, data.OrbitPlanetId);
-            }
-
-            if (data.LocalCharacter != null)
-            {
-                RestoreCharacter(world.LocalSkills, data.LocalCharacter);
             }
 
             return world;
@@ -143,36 +137,6 @@ namespace Onyx.Core.Persistence
             }
 
             world.Ship.CopyFrom(temp);
-        }
-
-        // ------------------------------------------------------------------ Charakter
-
-        private static CharacterSaveData CaptureCharacter(CharacterSkills skills)
-        {
-            var all = DisciplineNames.All;
-            return new CharacterSaveData
-            {
-                Levels = all.Select(skills.Level).ToArray(),
-                Experience = all.Select(skills.Experience).ToArray(),
-                Locks = all.Select(d => (int)skills.GetLock(d)).ToArray(),
-                Unlocked = skills.Unlocked.OrderBy(id => id, StringComparer.Ordinal).ToArray(),
-            };
-        }
-
-        private static void RestoreCharacter(CharacterSkills skills, CharacterSaveData data)
-        {
-            var all = DisciplineNames.All;
-            for (int i = 0; i < all.Length; i++)
-            {
-                int level = data.Levels != null && i < data.Levels.Length ? data.Levels[i] : 0;
-                float xp = data.Experience != null && i < data.Experience.Length ? data.Experience[i] : 0f;
-                var mode = data.Locks != null && i < data.Locks.Length && Enum.IsDefined(typeof(SkillLock), data.Locks[i])
-                    ? (SkillLock)data.Locks[i]
-                    : SkillLock.Raise;
-                skills.RestoreDiscipline(all[i], level, xp, mode);
-            }
-
-            skills.RestoreUnlocked(data.Unlocked ?? Array.Empty<string>());
         }
     }
 }

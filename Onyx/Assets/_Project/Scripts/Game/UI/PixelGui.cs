@@ -116,6 +116,33 @@ namespace Onyx.Game.UI
             if (inner > 0) Fill(x + 1, y + 1, inner, h - 2, fill);
         }
 
+        /// <summary>Pixellinie zwischen zwei Punkten (virtuelle Koordinaten), wahlweise gestrichelt.</summary>
+        public void Line(float x0, float y0, float x1, float y1, Color color, bool dashed = false)
+        {
+            if (Event.current.type != EventType.Repaint)
+            {
+                return; // nur zeichnen, nicht bei Eingabe-Ereignissen rechnen
+            }
+
+            int steps = Mathf.CeilToInt(Mathf.Max(Mathf.Abs(x1 - x0), Mathf.Abs(y1 - y0)));
+            for (int i = 0; i <= steps; i++)
+            {
+                if (dashed && (i / 2) % 2 == 1)
+                {
+                    continue;
+                }
+
+                float t = steps == 0 ? 0f : i / (float)steps;
+                Fill(Mathf.Round(x0 + (x1 - x0) * t), Mathf.Round(y0 + (y1 - y0) * t), 1, 1, color);
+            }
+        }
+
+        /// <summary>Mausposition in virtuellen Koordinaten.</summary>
+        public Vector2 Mouse => new Vector2((Event.current.mousePosition.x - OriginX) / Scale, (Event.current.mousePosition.y - OriginY) / Scale);
+
+        public static bool Contains(float x, float y, float w, float h, Vector2 point) =>
+            point.x >= x && point.x < x + w && point.y >= y && point.y < y + h;
+
         /// <summary>Halbtransparentes Feld mit Rahmen (für Panels).</summary>
         public void Panel(float x, float y, float w, float h, Color border)
         {

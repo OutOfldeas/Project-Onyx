@@ -21,6 +21,8 @@ namespace Onyx.Game.UI
         private float messageUntil;
         private float shownSince = -1f;
 
+        private Onyx.Core.Skills.CharacterSkills subscribedCharacter;
+
         private void OnEnable()
         {
             CrashSiteNet.StationRepaired += OnStationRepaired;
@@ -29,6 +31,24 @@ namespace Onyx.Game.UI
         private void OnDisable()
         {
             CrashSiteNet.StationRepaired -= OnStationRepaired;
+            if (subscribedCharacter != null) subscribedCharacter.LevelChanged -= OnLevelChanged;
+        }
+
+        private void Update()
+        {
+            // Stufenaufstiege des eigenen Charakters melden
+            var character = GameSession.Instance != null ? GameSession.Instance.Character : null;
+            if (character != subscribedCharacter)
+            {
+                if (subscribedCharacter != null) subscribedCharacter.LevelChanged -= OnLevelChanged;
+                subscribedCharacter = character;
+                if (subscribedCharacter != null) subscribedCharacter.LevelChanged += OnLevelChanged;
+            }
+        }
+
+        private void OnLevelChanged(Onyx.Core.Skills.Discipline discipline, int level)
+        {
+            Show($"{Onyx.Core.Skills.DisciplineNames.German(discipline)} Stufe {level}!  Neuer Skillpunkt (K)", SkillTreeScreen.ColorOf(discipline));
         }
 
         private void OnStationRepaired(RepairPoint point)
@@ -65,7 +85,7 @@ namespace Onyx.Game.UI
         {
             var vitals = PlayerVitals.Local;
             var site = CrashSiteNet.ActiveSite;
-            if (vitals == null || site == null || StarMapScreen.IsOpen || GameSession.Instance == null)
+            if (vitals == null || site == null || StarMapScreen.IsOpen || SkillTreeScreen.IsOpen || GameSession.Instance == null)
             {
                 shownSince = -1f;
                 return;
@@ -101,7 +121,7 @@ namespace Onyx.Game.UI
 
             if (Time.unscaledTime - shownSince < HintSeconds)
             {
-                gui.Text(8, PixelGui.Height - 12, "WASD laufen · E halten: reparieren · M Karte · F1 Dev", PixelGui.Steel2);
+                gui.Text(8, PixelGui.Height - 12, "WASD laufen · E halten: reparieren · M Karte · K Skills · F1 Dev", PixelGui.Steel2);
             }
         }
 

@@ -66,7 +66,7 @@ namespace Onyx.Game.Player
             }
 
             var site = CrashSiteNet.ActiveSite;
-            bool canAct = site != null && (vitals == null || !vitals.IsDowned) && !DevMode.BlocksGameplayInput && !StarMapScreen.IsOpen;
+            bool canAct = site != null && (vitals == null || !vitals.IsDowned) && !GameplayInput.Blocked;
             Keyboard keyboard = Keyboard.current;
             bool holding = canAct && keyboard != null && keyboard.eKey.isPressed;
             Vector3 p = transform.position;

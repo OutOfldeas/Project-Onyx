@@ -179,6 +179,12 @@ graph LR
 - Erfahrung nur für **sinnvolle** Aktionen, abhängig von der Schwierigkeit. Wiederholungen bringen abnehmend weniger.
 - **Mentoring:** Wer neben einem deutlich erfahreneren Mitspieler dieselbe Tätigkeit ausübt, lernt schneller. Später einsteigende Freunde holen so auf.
 
+### 5.7 Umsetzung (M3) 🔨
+- **Charakter gehört dem Spieler:** Disziplinen, Erfahrung und Fähigkeiten liegen in `charakter.json` beim Spieler und wandern in jede Welt mit (wie bei Terraria). Die Welt speichert der Host.
+- **Erfahrung durch Tun:** Reparieren → Technik (2 EP je Arbeitssekunde, Anteil nach eigenem Tempo); Wege draußen → Erkundung (0,25 EP je Kachel); neues Sternsystem → 60 EP Erkundung.
+- **Erste Wirkungen:** +3 % Reparaturtempo je Technikstufe, „Grundreparatur“ +20 %, „Leichter Schritt“ −20 % Sauerstoffverbrauch.
+- **Skilltree-Bildschirm (K):** vier Spalten, Linien zu Voraussetzungen, Querlinien für Hybride; Klick schaltet frei; Umlern-Einstellung je Disziplin per Klick.
+
 ## 6. Multiplayer und Persistenz
 
 ### 6.1 Anforderungen ✅

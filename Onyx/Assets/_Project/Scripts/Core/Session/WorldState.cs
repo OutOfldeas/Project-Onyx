@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using Onyx.Core.CrashSite;
 using Onyx.Core.Galaxy;
 using Onyx.Core.Ships;
@@ -21,7 +22,7 @@ namespace Onyx.Core.Session
         public ShipStats ShipStats { get; private set; }
         public ShipNavigation Navigation { get; }
         public SkillTree SkillTree { get; }
-        public CharacterSkills LocalSkills { get; }
+        public CharacterSkills LocalSkills { get; private set; }
         public DayNightCycle Clock { get; }
 
         /// <summary>Die Absturzstelle auf dem Startplaneten (Akt 1).</summary>
@@ -54,6 +55,21 @@ namespace Onyx.Core.Session
         private float EffectiveJumpRange => CrashSite.IsRepaired(StationKind.Engine) ? ShipStats.JumpRange : 0f;
 
         public static WorldState CreateNew(int seed) => new WorldState(seed);
+
+        /// <summary>
+        /// Übernimmt den Charakter des lokalen Spielers in diese Welt. Der Charakter gehört dem Spieler,
+        /// nicht der Welt, und wandert bei einem Weltwechsel mit.
+        /// </summary>
+        public void AttachLocalCharacter(CharacterSkills character)
+        {
+            if (character == null) throw new ArgumentNullException(nameof(character));
+            if (character.Tree != SkillTree && character.Tree.Nodes.Count() != SkillTree.Nodes.Count())
+            {
+                throw new ArgumentException("Charakter gehört zu einem anderen Skilltree.", nameof(character));
+            }
+
+            LocalSkills = character;
+        }
 
         /// <summary>Berechnet die Schiffswerte neu und überträgt Reichweite und Tankgröße auf die Navigation.</summary>
         public void RecalculateShip()

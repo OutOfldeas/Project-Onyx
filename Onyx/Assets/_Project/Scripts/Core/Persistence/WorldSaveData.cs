@@ -26,7 +26,6 @@ namespace Onyx.Core.Persistence
         public int[] DiscoveredSystems;
 
         public ShipSaveData Ship;
-        public CharacterSaveData LocalCharacter;
     }
 
     [Serializable]
@@ -54,6 +53,8 @@ namespace Onyx.Core.Persistence
     [Serializable]
     public sealed class CharacterSaveData
     {
+        public int Version;
+
         /// <summary>Je Disziplin in der Reihenfolge von DisciplineNames.All.</summary>
         public int[] Levels;
         public float[] Experience;

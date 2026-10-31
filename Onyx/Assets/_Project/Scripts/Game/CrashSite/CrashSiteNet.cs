@@ -1,5 +1,6 @@
 using Onyx.Core.CrashSite;
 using Onyx.Core.Session;
+using Onyx.Core.Skills;
 using Onyx.Game.Player;
 using Onyx.Game.Session;
 using Unity.Netcode;
@@ -26,6 +27,8 @@ namespace Onyx.Game.CrashSite
 
         private float timeSyncCooldown;
         private float allDownedFor;
+        private float experienceCooldown;
+        private readonly System.Collections.Generic.Dictionary<ulong, float> pendingWork = new System.Collections.Generic.Dictionary<ulong, float>();
 
         /// <summary>Spielstand der Absturzstelle, sobald die Sitzung läuft – sonst null.</summary>
         public static CrashSiteState ActiveSite =>
@@ -97,8 +100,9 @@ namespace Onyx.Game.CrashSite
             var world = GameSession.Instance.World;
             if (IsServer)
             {
-                world.CrashSite.Tick(Time.deltaTime);
+                world.CrashSite.Tick(Time.deltaTime, PlayerCharacter.RepairSpeedOf, AddWork);
                 PushProgress(world.CrashSite);
+                FlushExperience();
 
                 timeSyncCooldown -= Time.unscaledDeltaTime;
                 if (timeSyncCooldown <= 0f)
@@ -114,6 +118,34 @@ namespace Onyx.Game.CrashSite
                 // Nur bei spürbarer Abweichung nachziehen; dazwischen läuft die Uhr lokal weiter.
                 world.Clock.SetTimeOfDay(timeOfDay.Value);
             }
+        }
+
+        private void AddWork(ulong clientId, float work)
+        {
+            pendingWork.TryGetValue(clientId, out float sum);
+            pendingWork[clientId] = sum + work;
+        }
+
+        /// <summary>Gesammelte Reparaturarbeit einmal pro Sekunde als Technik-Erfahrung verschicken.</summary>
+        private void FlushExperience()
+        {
+            experienceCooldown -= Time.deltaTime;
+            if (experienceCooldown > 0f || pendingWork.Count == 0)
+            {
+                return;
+            }
+
+            experienceCooldown = 1f;
+            foreach (var pair in pendingWork)
+            {
+                var character = PlayerCharacter.ForClient(pair.Key);
+                if (character != null)
+                {
+                    character.ServerGrant(Discipline.Engineering, pair.Value * SkillEffects.RepairExperiencePerWork);
+                }
+            }
+
+            pendingWork.Clear();
         }
 
         private void FillProgress()
