@@ -17,6 +17,10 @@
 
 ## 2. Täglicher Ablauf
 
+**Neue Versionen kommen automatisch:** `Onyx-starten.bat` holt vor dem Start den neuesten Stand, und solange Unity offen ist, schaut es alle drei Minuten auf GitHub nach (Menü **Onyx → Git**: *Jetzt aktualisieren*, *Automatisch aktualisieren* an/aus). Aktualisiert wird nur, wenn dabei nichts von dir verloren geht; sonst fragt ein Dialog. Nicht während Play.
+
+Wer selbst Änderungen macht:
+
 ```
 git pull                 # vor dem Arbeiten: Stand der anderen holen
 … arbeiten, in Unity testen …

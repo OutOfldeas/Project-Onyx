@@ -30,6 +30,7 @@ Abhängigkeiten nur Game → Net → Core. `WorldState` (Core) ist der Spielstan
 - Spielstände: Welt beim Host (`welt.json`), Charakter bei jedem Spieler (`charakter.json`), beides über `WorldPersistence`/`CharacterPersistence` in Core.
 
 ## Git
+- Der Rechner des Besitzers holt neue Commits selbst (`GitAutoUpdate` im Editor, `Onyx-starten.bat`). **Dateien nicht mehr direkt nach `D:\Project-Onyx` schreiben** – nur pushen; sonst blockieren die Kopien das automatische Aktualisieren.
 - Der Besitzer wünscht **direkte Pushes auf `main`** statt PRs für Claudes Arbeit (Ausnahme: größere riskante Umbauten nach Absprache).
 - Commit-Nachrichten auf Deutsch, kurz und beschreibend.
 - Windows-Skripte (`*.bat`) mit CRLF; Unity-YAML mit LF (siehe `.gitattributes`).
