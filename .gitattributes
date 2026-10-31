@@ -27,3 +27,7 @@
 *.mp3      binary
 *.ttf      binary
 *.otf      binary
+
+# Windows-Skripte brauchen CRLF
+*.bat text eol=crlf
+*.cmd text eol=crlf
