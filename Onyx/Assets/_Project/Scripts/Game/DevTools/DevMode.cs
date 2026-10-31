@@ -215,11 +215,43 @@ namespace Onyx.Game.DevTools
                 return $"Zeitraffer ×{CurrentSession.TimeScale:0.##}.";
             });
 
+            registry.Register("heal", "heal", "Füllt Sauerstoff, Schild und Leben der eigenen Figur auf (Host).", _ =>
+                WithHostVitals(v => { v.ServerHeal(); return "Geheilt."; }));
+
+            registry.Register("down", "down", "Macht die eigene Figur kampfunfähig, um Wiederbeleben zu testen (Host).", _ =>
+                WithHostVitals(v => { v.ServerKnockDown(); return "Kampfunfähig."; }));
+
+            registry.Register("o2", "o2 <prozent>", "Setzt den eigenen Sauerstoff (Host).", args =>
+            {
+                float percent = DevCommandRegistry.Float(args, 0, "prozent");
+                return WithHostVitals(v => { v.ServerSetOxygen(percent / 100f); return $"Sauerstoff {percent:0} %."; });
+            });
+
+            registry.Register("god", "god", "Schaltet Unverwundbarkeit der eigenen Figur um (Host).", _ =>
+                WithHostVitals(v => { v.GodMode = !v.GodMode; return v.GodMode ? "Unverwundbar." : "Wieder verwundbar."; }));
+
+            registry.Register("noclip", "noclip", "Durch Wände laufen ein/aus.", _ =>
+            {
+                PlayerMovement.NoClip = !PlayerMovement.NoClip;
+                return PlayerMovement.NoClip ? "Noclip an." : "Noclip aus.";
+            });
+
             registry.Register("clear", "clear", "Leert die Konsole.", _ =>
             {
                 log.Clear();
                 return string.Empty;
             });
+        }
+
+        private static string WithHostVitals(System.Func<PlayerVitals, string> action)
+        {
+            var vitals = PlayerVitals.Local;
+            if (vitals == null)
+            {
+                return "Keine eigene Figur – erst hosten oder beitreten.";
+            }
+
+            return vitals.IsServer ? action(vitals) : "Nur beim Host möglich.";
         }
 
         private static Transform LocalPlayer()

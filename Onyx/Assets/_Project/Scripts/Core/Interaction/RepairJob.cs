@@ -59,6 +59,21 @@ namespace Onyx.Core.Interaction
         }
 
         /// <summary>
+        /// Übernimmt einen Fortschritt von außen: bei Mitspielern den Stand des Hosts,
+        /// im Dev-Modus beliebige Werte. Löst <see cref="Completed"/> aus, wenn die Reparatur dadurch fertig wird.
+        /// </summary>
+        public void SetProgress(float progress)
+        {
+            bool wasComplete = IsComplete;
+            Progress = Math.Max(0f, Math.Min(RequiredWork, progress));
+            if (IsComplete && !wasComplete)
+            {
+                workers.Clear();
+                Completed?.Invoke();
+            }
+        }
+
+        /// <summary>
         /// Schreitet die Reparatur voran.
         /// </summary>
         /// <param name="deltaSeconds">Vergangene Zeit.</param>

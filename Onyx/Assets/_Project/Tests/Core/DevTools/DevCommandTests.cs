@@ -62,6 +62,7 @@ namespace Onyx.Core.Tests.DevTools
             var lane = world.Galaxy.LanesOf(world.Navigation.CurrentSystemId).OrderBy(l => l.Distance).First();
             int target = lane.Other(world.Navigation.CurrentSystemId);
 
+            registry.Execute("repair all");
             registry.Execute("fuel");
             registry.Execute($"jump {target}");
 
@@ -77,6 +78,18 @@ namespace Onyx.Core.Tests.DevTools
         }
 
         [Test]
+        public void Repair_AllStations_MakesFrigateFlyable()
+        {
+            Assert.That(world.Navigation.JumpRange, Is.EqualTo(0f));
+
+            string answer = registry.Execute("repair all");
+
+            Assert.That(world.CrashSite.AllRepaired, Is.True);
+            Assert.That(world.Navigation.JumpRange, Is.GreaterThan(0f));
+            Assert.That(answer, Does.Contain("startklar"));
+        }
+
+        [Test]
         public void NewWorld_ReplacesWorld()
         {
             registry.Execute("newworld 777");
@@ -87,6 +100,7 @@ namespace Onyx.Core.Tests.DevTools
         [Test]
         public void Place_ChangesShip_AndUpdatesNavigation()
         {
+            registry.Execute("repair all");
             float rangeBefore = world.Navigation.JumpRange;
 
             string answer = registry.Execute("place engine 6 11 r");

@@ -38,6 +38,7 @@ namespace Onyx.Game.Bootstrap
             Root.AddComponent<GameSession>();
             Root.AddComponent<WorldLighting>();
             Root.AddComponent<StarMapScreen>();
+            Root.AddComponent<GameHud>();
 
             // Dev-Modus nur im Editor und in Entwickler-Builds.
             if (Debug.isDebugBuild)

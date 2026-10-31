@@ -56,7 +56,7 @@ gantt
 | # | Paket | Inhalt | Stand |
 |---|---|---|---|
 | 1.1 | **Sternenkarte** | Taste M: Pixelkarte im Art-Direction-Stil (Fraktionsgebiete, Sprungwege, Route, Schiffsposition), System wählen, Route planen, springen | ✅ erste Version |
-| 1.2 | **M1 Absturzstelle** | Tileset Rostwüste (16 px), Kapsel als Sauerstoff-Station, Sauerstoff/Schild-HUD, Fregatte als begehbares Wrack, kaputte Module gemeinsam reparieren, Nacht mit 2D-Licht | ⏳ |
+| 1.2 | **M1 Absturzstelle** | Gelände aus Seed (Platzhalter-Tiles Rostwüste), Kapsel füllt Sauerstoff, HUD für O2/Schild/Leben, begehbares Fregattenwrack mit drei kaputten Systemen (Sauerstoffgenerator → Luft im Wrack, Reaktor → Strom und Licht, Antrieb → Sprung möglich), gemeinsam reparieren mit E, Nachtkälte, Wiederbeleben, Rettung zur Kapsel | 🔨 spielbar, wartet auf Playtest |
 | 1.3 | **M0b Steam** | Steamworks (Facepunch.Steamworks), Lobby + Einladen über Freunde-Liste, Steam-Transport statt IP | ⏳ braucht App-ID |
 | 1.4 | **M2 Geteilte Welt** | Spielstand speichern/laden (Welt in Abschnitten), jeder kann hosten, Sperre gegen doppeltes Hosten | 💤 |
 | 1.5 | **M3 Skills im Spiel** | Reparieren gibt Technik-EP, erste Knoten wirken (schneller reparieren, Feldreparatur), Skilltree-Bildschirm im Stil der Sternenkarte | 💤 |
@@ -107,6 +107,6 @@ gantt
 ## Die nächsten Schritte (konkret)
 
 1. **Sternenkarte im Spiel testen** (M drücken) und Feedback zum Look geben.
-2. **M1 Absturzstelle starten**: Tileset-Platzhalter, Kapsel-Station, HUD für Sauerstoff/Schild, erstes reparierbares Modul an der Fregatte.
+2. **M1 Absturzstelle ausprobieren** (Menü Onyx → Setup → M1-Absturzstelle erstellen, dann Play → Hosten), am besten zu zweit; danach Feinschliff: echte Grafik, Werte, Sounds.
 3. **Steam-App-ID beantragen** – das dauert ein paar Tage und blockiert M0b.
 4. Wenn der Freund mitmacht: **Team-Workspace** einrichten (Smart Merge, Leitfaden, Issues).

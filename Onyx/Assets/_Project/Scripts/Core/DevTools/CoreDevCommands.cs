@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Text;
+using Onyx.Core.CrashSite;
 using Onyx.Core.Galaxy;
 using Onyx.Core.Session;
 using Onyx.Core.Skills;
@@ -166,6 +167,56 @@ namespace Onyx.Core.DevTools
                 w.Ship.FillHull(DevCommandRegistry.Int(args, 0, "x"), DevCommandRegistry.Int(args, 1, "y"), DevCommandRegistry.Int(args, 2, "breite"), DevCommandRegistry.Int(args, 3, "höhe"));
                 return $"Rumpf: {w.Ship.HullCount} Kacheln.";
             });
+
+            // --- Absturzstelle ---
+            registry.Register("site", "site", "Zeigt den Reparaturstand der Fregatte.", _ => DescribeCrashSite(getWorld().CrashSite));
+
+            registry.Register("repair", "repair <sauerstoff|reaktor|antrieb|all> [prozent]", "Setzt den Reparaturfortschritt einer Station (nur beim Host wirksam).", args =>
+            {
+                var site = getWorld().CrashSite;
+                string which = DevCommandRegistry.Text(args, 0, "station").ToLowerInvariant();
+                float percent = args.Length > 1 ? DevCommandRegistry.Float(args, 1, "prozent") : 100f;
+                var targets = which == "all" ? site.Layout.RepairPoints.ToList() : new System.Collections.Generic.List<RepairPoint> { site.Point(ParseStation(which)) };
+                foreach (var point in targets)
+                {
+                    site.ApplySyncedProgress(point.Index, point.Work * percent / 100f);
+                }
+
+                return DescribeCrashSite(site);
+            });
+        }
+
+        public static StationKind ParseStation(string text)
+        {
+            switch (text.ToLowerInvariant())
+            {
+                case "sauerstoff":
+                case "o2":
+                case "oxygen":
+                    return StationKind.OxygenGenerator;
+                case "reaktor":
+                case "reactor":
+                    return StationKind.Reactor;
+                case "antrieb":
+                case "engine":
+                    return StationKind.Engine;
+                default:
+                    throw new DevCommandException($"Unbekannte Station „{text}“ (sauerstoff, reaktor, antrieb, all).");
+            }
+        }
+
+        public static string DescribeCrashSite(CrashSiteState site)
+        {
+            var b = new StringBuilder();
+            foreach (var point in site.Layout.RepairPoints)
+            {
+                var job = site.Job(point.Index);
+                string state = job.IsComplete ? "läuft" : $"{job.Ratio * 100f:0} %";
+                b.AppendLine($"{point.Name,-20} {state,-6} Helfer {job.WorkerCount}");
+            }
+
+            b.Append(site.AllRepaired ? "Fregatte startklar." : $"{site.RepairedCount}/{site.Layout.RepairPoints.Count} Systeme laufen.");
+            return b.ToString();
         }
 
         public static Discipline ParseDiscipline(string text)

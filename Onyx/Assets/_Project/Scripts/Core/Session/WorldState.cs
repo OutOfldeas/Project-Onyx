@@ -1,4 +1,5 @@
 using System;
+using Onyx.Core.CrashSite;
 using Onyx.Core.Galaxy;
 using Onyx.Core.Ships;
 using Onyx.Core.Skills;
@@ -23,6 +24,9 @@ namespace Onyx.Core.Session
         public CharacterSkills LocalSkills { get; }
         public DayNightCycle Clock { get; }
 
+        /// <summary>Die Absturzstelle auf dem Startplaneten (Akt 1).</summary>
+        public CrashSiteState CrashSite { get; }
+
         /// <summary>Nach jeder Änderung am Schiff (neu berechnete Werte).</summary>
         public event Action ShipChanged;
 
@@ -33,13 +37,21 @@ namespace Onyx.Core.Session
             Modules = ModuleCatalog.CreateDefault();
             Ship = ShipTemplates.CrashedFrigate(Modules);
             ShipStats = ShipStats.Calculate(Ship);
-            Navigation = new ShipNavigation(Galaxy, Math.Max(1f, ShipStats.FuelCapacity), ShipStats.JumpRange);
+            CrashSite = new CrashSiteState(CrashSiteGenerator.Generate(seed));
+            Navigation = new ShipNavigation(Galaxy, Math.Max(1f, ShipStats.FuelCapacity), EffectiveJumpRange);
             SkillTree = SkillCatalog.CreateDefault();
             LocalSkills = new CharacterSkills(SkillTree);
             Clock = new DayNightCycle();
 
             Ship.Changed += RecalculateShip;
+            CrashSite.StationRepaired += point =>
+            {
+                if (point.Kind == StationKind.Engine) RecalculateShip();
+            };
         }
+
+        /// <summary>Solange der Antrieb an der Absturzstelle kaputt ist, springt die Fregatte nirgendwohin.</summary>
+        private float EffectiveJumpRange => CrashSite.IsRepaired(StationKind.Engine) ? ShipStats.JumpRange : 0f;
 
         public static WorldState CreateNew(int seed) => new WorldState(seed);
 
@@ -47,7 +59,7 @@ namespace Onyx.Core.Session
         public void RecalculateShip()
         {
             ShipStats = ShipStats.Calculate(Ship);
-            Navigation.JumpRange = ShipStats.JumpRange;
+            Navigation.JumpRange = EffectiveJumpRange;
             Navigation.Fuel.SetMax(Math.Max(1f, ShipStats.FuelCapacity));
             ShipChanged?.Invoke();
         }

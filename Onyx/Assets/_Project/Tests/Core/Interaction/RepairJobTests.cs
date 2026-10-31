@@ -100,5 +100,23 @@ namespace Onyx.Core.Tests.Interaction
             Assert.Throws<ArgumentOutOfRangeException>(() => new RepairJob(0f));
             Assert.Throws<ArgumentOutOfRangeException>(() => new RepairJob(10f).Tick(-1f));
         }
+
+        [Test]
+        public void SetProgress_CompletesAndRaisesEventOnce()
+        {
+            var job = new RepairJob(10f);
+            int completed = 0;
+            job.Completed += () => completed++;
+            job.Join(1);
+
+            job.SetProgress(4f);
+            job.SetProgress(12f);
+            job.SetProgress(10f);
+
+            Assert.That(job.IsComplete, Is.True);
+            Assert.That(job.Progress, Is.EqualTo(10f));
+            Assert.That(job.WorkerCount, Is.EqualTo(0));
+            Assert.That(completed, Is.EqualTo(1));
+        }
     }
 }

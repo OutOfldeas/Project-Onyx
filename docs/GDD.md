@@ -36,13 +36,15 @@ Eine kleine Crew erkundet gemeinsam eine Galaxie, in der die Natur wunderschön 
 
 Die Crew einer Fregatte verliert eine Weltraumschlacht. Die Spieler entkommen in **Fluchtkapseln** und **notlanden auf einem Planeten**. Auch die **Fregatte ist auf dem Planeten abgestürzt**.
 
-### 3.2 Akt 1: Die Absturzstelle 💡
+### 3.2 Akt 1: Die Absturzstelle 🔨
 
 - **Getrennte Landung:** Jeder Spieler landet in einer eigenen Kapsel, verstreut in der Umgebung. Erstes Ziel: sich gegenseitig finden, indem man Landmarken beschreibt („roter Felsbogen, Rauch im Osten“). Das bringt Kommunikation bei, ohne wie ein Tutorial zu wirken.
 - **Die Kapsel als erster Rückzugsort:** Sauerstoff nachfüllen, Notsender, kleines Lager – der erste Versorgungspunkt (siehe 4.2).
 - **Die Fregatte wird das Schiff der Crew:** Wrack finden, bergen, reparieren und abheben. Das Abheben ist der Übergang zur Schiffs- und Galaxie-Ebene und erklärt, warum alles geflickt ist.
 - **Frühe Bedrohung:** Die Sieger der Schlacht durchsuchen die Absturzstelle. Das bringt die erste Fraktion ins Spiel.
 - **Frühere Posten an Bord** geben kleine Startboni in einer Disziplin (z. B. ehemaliger Bordtechniker → etwas Technik).
+
+**Umgesetzt in M1 (erste spielbare Fassung):** Alle starten gemeinsam in *einer* Kapsel (getrennte Landung folgt später). Die Kapsel füllt Sauerstoff auf. Draußen sinkt der Sauerstoff, nachts kommt Kälte dazu. Im Wrack ist man vor Kälte geschützt, aber ohne Luft, bis der **Sauerstoffgenerator** läuft. Der **Reaktor** bringt Strom und Licht. Erst danach lässt sich der **Antrieb** reparieren, dann ist die Fregatte startklar. Reparieren: E halten, mehrere Spieler gleichzeitig sind schneller. Kampfunfähige werden von Mitspielern wiederbelebt. Sind alle am Boden, holt die Rettungsautomatik der Kapsel sie zurück.
 
 ### 3.3 Offen ❓
 

@@ -1,3 +1,5 @@
+using Onyx.Core.CrashSite;
+using Onyx.Game.CrashSite;
 using Onyx.Game.DevTools;
 using Onyx.Game.UI;
 using Unity.Netcode;
@@ -37,7 +39,45 @@ namespace Onyx.Game.Player
                 input.Normalize();
             }
 
-            transform.position += (Vector3)(input * (speed * Time.deltaTime));
+            Vector2 delta = input * (speed * Time.deltaTime);
+            if (delta == Vector2.zero || (vitals != null && vitals.IsDowned))
+            {
+                return;
+            }
+
+            Vector3 position = transform.position;
+            var site = CrashSiteNet.ActiveSite;
+            if (site == null || NoClip)
+            {
+                transform.position = position + (Vector3)delta;
+                return;
+            }
+
+            // Achsen einzeln prüfen, damit man an Wänden entlanggleitet statt hängen zu bleiben.
+            var layout = site.Layout;
+            if (!Blocked(layout, position.x + delta.x, position.y)) position.x += delta.x;
+            if (!Blocked(layout, position.x, position.y + delta.y)) position.y += delta.y;
+            transform.position = position;
+        }
+
+        /// <summary>Dev-Modus: durch Wände laufen.</summary>
+        public static bool NoClip { get; set; }
+
+        // Fußfläche der Figur (in Kacheln): halbe Breite und Tiefe ab dem Fußpunkt.
+        private const float FootHalfWidth = 0.3f;
+        private const float FootDepth = 0.25f;
+
+        private static bool Blocked(CrashSiteLayout layout, float x, float y)
+        {
+            return layout.IsBlockedAt(x - FootHalfWidth, y) || layout.IsBlockedAt(x + FootHalfWidth, y)
+                || layout.IsBlockedAt(x - FootHalfWidth, y + FootDepth) || layout.IsBlockedAt(x + FootHalfWidth, y + FootDepth);
+        }
+
+        private PlayerVitals vitals;
+
+        private void Awake()
+        {
+            vitals = GetComponent<PlayerVitals>();
         }
 
         private static Vector2 ReadInput()

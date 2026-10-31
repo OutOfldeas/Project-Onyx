@@ -26,9 +26,9 @@ namespace Onyx.Editor
     public static class M0SceneBuilder
     {
         private const string Root = "Assets/_Project";
-        private const string PrefabFolder = Root + "/Prefabs";
-        private const string SceneFolder = Root + "/Scenes";
-        private const string NetworkDataFolder = Root + "/Data/Network";
+        internal const string PrefabFolder = Root + "/Prefabs";
+        internal const string SceneFolder = Root + "/Scenes";
+        internal const string NetworkDataFolder = Root + "/Data/Network";
 
         private const string PlayerPrefabPath = PrefabFolder + "/Player.prefab";
         private const string PrefabListPath = NetworkDataFolder + "/OnyxNetworkPrefabs.asset";
@@ -64,7 +64,7 @@ namespace Onyx.Editor
                 "OK");
         }
 
-        private static GameObject CreatePlayerPrefab()
+        internal static GameObject CreatePlayerPrefab()
         {
             var go = new GameObject("Player");
             go.AddComponent<NetworkObject>();
@@ -80,15 +80,17 @@ namespace Onyx.Editor
             networkTransform.SyncScaleZ = false;
 
             go.AddComponent<SpriteRenderer>();
+            go.AddComponent<PlayerVitals>();
             go.AddComponent<PlayerVisual>();
             go.AddComponent<PlayerMovement>();
+            go.AddComponent<PlayerInteraction>();
 
             GameObject prefab = PrefabUtility.SaveAsPrefabAsset(go, PlayerPrefabPath);
             Object.DestroyImmediate(go);
             return prefab;
         }
 
-        private static NetworkPrefabsList CreatePrefabList(GameObject playerPrefab)
+        internal static NetworkPrefabsList CreatePrefabList(GameObject playerPrefab)
         {
             var list = AssetDatabase.LoadAssetAtPath<NetworkPrefabsList>(PrefabListPath);
             if (list == null)
@@ -109,7 +111,24 @@ namespace Onyx.Editor
         private static void CreateScene(GameObject playerPrefab, NetworkPrefabsList prefabList)
         {
             Scene scene = EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
+            CreateNetworkCameraAndLight(playerPrefab, prefabList);
 
+            // Boden
+            var grid = new GameObject("Grid");
+            grid.AddComponent<Grid>();
+            var ground = new GameObject("Ground");
+            ground.transform.SetParent(grid.transform, false);
+            ground.AddComponent<Tilemap>();
+            var groundRenderer = ground.AddComponent<TilemapRenderer>();
+            groundRenderer.sortingOrder = -100;
+            ground.AddComponent<PlaceholderGround>();
+
+            EditorSceneManager.SaveScene(scene, ScenePath);
+        }
+
+        /// <summary>Netzwerk, Pixel-Perfect-Kamera und globales 2D-Licht – gemeinsam für alle Testszenen.</summary>
+        internal static void CreateNetworkCameraAndLight(GameObject playerPrefab, NetworkPrefabsList prefabList)
+        {
             // Netzwerk
             var network = new GameObject("NetworkManager");
             var manager = network.AddComponent<NetworkManager>();
@@ -148,34 +167,22 @@ namespace Onyx.Editor
             pixelPerfect.cropFrame = PixelPerfectCamera.CropFrame.None;
             cameraGo.AddComponent<CameraFollow>();
 
-            // Licht: vorerst volle Helligkeit; Tag/Nacht kommt mit M1.
+            // Licht: Helligkeit folgt der Tageszeit (WorldLighting).
             var lightGo = new GameObject("Global Light 2D");
             var globalLight = lightGo.AddComponent<Light2D>();
             globalLight.lightType = Light2D.LightType.Global;
             globalLight.intensity = 1f;
             globalLight.targetSortingLayers = SortingLayer.layers.Select(layer => layer.id).ToArray();
-
-            // Boden
-            var grid = new GameObject("Grid");
-            grid.AddComponent<Grid>();
-            var ground = new GameObject("Ground");
-            ground.transform.SetParent(grid.transform, false);
-            ground.AddComponent<Tilemap>();
-            var groundRenderer = ground.AddComponent<TilemapRenderer>();
-            groundRenderer.sortingOrder = -100;
-            ground.AddComponent<PlaceholderGround>();
-
-            EditorSceneManager.SaveScene(scene, ScenePath);
         }
 
-        private static void PutSceneFirstInBuild(string path)
+        internal static void PutSceneFirstInBuild(string path)
         {
             var scenes = EditorBuildSettings.scenes.Where(s => s.path != path).ToList();
             scenes.Insert(0, new EditorBuildSettingsScene(path, true));
             EditorBuildSettings.scenes = scenes.ToArray();
         }
 
-        private static void EnsureFolder(string path)
+        internal static void EnsureFolder(string path)
         {
             if (AssetDatabase.IsValidFolder(path))
             {
