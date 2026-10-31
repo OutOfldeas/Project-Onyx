@@ -102,7 +102,7 @@ gantt
 | **Grafik** | Tileset Rostwüste (Boden, Felsen, Wrackteile), Spielerfigur 16 × 32 mit 4-Richtungen-Laufanimation, Fluchtkapsel, Fregatten-Wrack, HUD-Elemente |
 | **Audio** | Platzhalter-Sounds (Schritte, Reparatur, Alarm), später eigene Musik |
 | **Infrastruktur** | Steam-App-ID (100 $ Steam Direct), Build-Pipeline für Test-Builds, Crash-Logs |
-| **Team** | Zweiter Entwickler: Unity Smart Merge, Team-Leitfaden, GitHub Issues pro Paket |
+| **Team** | ✅ Unity Smart Merge (`Team-Setup.bat`), Team-Leitfaden (`docs/Team.md`), `CLAUDE.md` · offen: GitHub Issues pro Paket, Collaborator einladen |
 
 ## Die nächsten Schritte (konkret)
 

@@ -16,6 +16,15 @@
 *.anim       text eol=lf
 *.controller text eol=lf
 
+# Unity Smart Merge: führt Konflikte in Szenen/Prefabs intelligent zusammen.
+# Der Treiber „unityyamlmerge“ wird pro Rechner einmal mit Team-Setup.bat eingerichtet.
+*.unity      merge=unityyamlmerge
+*.prefab     merge=unityyamlmerge
+*.asset      merge=unityyamlmerge
+*.mat        merge=unityyamlmerge
+*.anim       merge=unityyamlmerge
+*.controller merge=unityyamlmerge
+
 # Binärdateien
 *.png      binary
 *.jpg      binary

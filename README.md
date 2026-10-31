@@ -14,7 +14,8 @@ Koop-Weltraumspiel für 2–4 Spieler: freie Erkundung, Survival, Basisbau und L
 1. Repo klonen, z. B. mit [GitHub Desktop](https://desktop.github.com/).
 2. **Doppelklick auf `Onyx-starten.bat`** im Repo-Ordner – öffnet Unity immer mit dem richtigen Projekt.
    Alternativ im Unity Hub: **Add → Add project from disk** und den Ordner `Onyx` wählen (nicht „New project“!).
-3. Editor-Version: **6000.6.7f1**. Alle im Team sollten dieselbe Version nutzen; die verwendete Version steht in `Onyx/ProjectSettings/ProjectVersion.txt`.
+3. Einmalig **`Team-Setup.bat`** ausführen (richtet Git für Unity-Szenen ein).
+4. Editor-Version: **6000.6.7f1**. Alle im Team sollten dieselbe Version nutzen; die verwendete Version steht in `Onyx/ProjectSettings/ProjectVersion.txt`.
 
 `Library/`, `Temp/`, `Logs/` und `UserSettings/` erzeugt Unity lokal; sie werden über die `.gitignore` aus dem Repo herausgehalten.
 
@@ -23,3 +24,4 @@ Koop-Weltraumspiel für 2–4 Spieler: freie Erkundung, Survival, Basisbau und L
 - [Game Design Document](docs/GDD.md)
 - [Architektur und Regeln für Code, Git und Unity](docs/Architektur.md)
 - [Roadmap: Phasen und nächste Schritte](docs/Roadmap.md)
+- [Zusammen arbeiten: Einrichtung, Ablauf, Testen zu zweit](docs/Team.md)
